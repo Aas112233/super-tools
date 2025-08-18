@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { HandwritingGenerator } from '../pages/tools/HandwritingGenerator';
 import { 
   ChevronDown, 
+  ChevronRight,
   Star, 
   Type, 
   Image, 
@@ -84,7 +85,7 @@ const TOOLS_REGISTRY: Record<string, Tool> = {
   'url-encoder-decoder': { id: 'url-encoder-decoder', name: 'URL Encoder/Decoder', href: '/tools/url-encoder-decoder' },
   'instagram-filters': { id: 'instagram-filters', name: 'Instagram Filter Effects', href: '/tools/instagram-filters' },
   'instagram-post-generator': { id: 'instagram-post-generator', name: 'Instagram Post Creator', href: '/tools/instagram-post-generator' },
-  'instagram-photo-downloader': { id: 'instagram-photo-downloader', name: 'Instagram Image Downloader', href: '/tools/instagram-photo-downloader' },
+  'instagram-photo-downloader': { id: 'instagram-photo-downloader', name: 'Instagram Image/Video Downloader', href: '/tools/instagram-photo-downloader' },
   'tweet-generator': { id: 'tweet-generator', name: 'Twitter Post Creator', href: '/tools/tweet-generator' },
   'tweet-to-image-converter': { id: 'tweet-to-image-converter', name: 'Tweet Image Generator', href: '/tools/tweet-to-image-converter' },
   'twitter-ad-revenue-generator': { id: 'twitter-ad-revenue-generator', name: 'Twitter Ad Earnings Calculator', href: '/tools/twitter-ad-revenue-generator' },
@@ -93,10 +94,19 @@ const TOOLS_REGISTRY: Record<string, Tool> = {
   'qr-code-generator': { id: 'qr-code-generator', name: 'QR Code Creator', href: '/tools/qr-code-generator' },
   'barcode-generator': { id: 'barcode-generator', name: 'Barcode Maker', href: '/tools/barcode-generator' },
   'fake-iban-generator': { id: 'fake-iban-generator', name: 'Mock IBAN Generator', href: '/tools/fake-iban-generator' },
+  'graphics-editor': { id: 'graphics-editor', name: 'Graphics Editor', href: '/tools/graphics-editor' },
 };
 
 // Static categories configuration
 const CATEGORIES_CONFIG: Category[] = [
+  {
+    id: 'image-editor',
+    name: 'Image Editor',
+    icon: <PenTool className="w-5 h-5 text-pink-400 drop-shadow-sm" />,
+    tools: [
+      'graphics-editor'
+    ]
+  },
   {
     id: 'favorite-tools',
     name: 'Bookmarked Tools',
@@ -170,12 +180,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isDark, toggleTheme } = useTheme();
   const isToolPage = location.pathname.startsWith('/tools/');
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
-    'favorite-tools': true,
-    'text-tools': true,
-    'image-tools': true,
-    'css-tools': true,
-  });
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
 
   console.log('Layout render - openCategories:', openCategories);
 
@@ -236,7 +241,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       'list-randomizer': <List className="w-4 h-4" />,
       'qr-code-generator': <QrCode className="w-4 h-4" />,
       'barcode-generator': <Barcode className="w-4 h-4" />,
-      'fake-iban-generator': <CreditCard className="w-4 h-4" />
+      'fake-iban-generator': <CreditCard className="w-4 h-4" />,
+      'graphics-editor': <PenTool className="w-4 h-4" />
     };
     return iconMap[toolId] || <Code className="w-4 h-4" />;
   };
@@ -359,10 +365,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {!isCollapsed && (
                   <motion.div
                     className="expand-icon-override"
-                    animate={{ rotate: openCategories[category.id] ? 180 : 0 }}
+                    animate={{ rotate: openCategories[category.id] ? 90 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ChevronDown className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5" />
                   </motion.div>
                 )}
               </motion.button>
