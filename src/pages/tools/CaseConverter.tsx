@@ -92,7 +92,7 @@ export const CaseConverter: React.FC = () => {
             ].map(({ type, label, icon }) => (
               <button
                 key={type}
-                className={`case-btn ${activeCase === type ? 'active' : ''}`}
+                className={`case-btn ${activeCase === type ? 'active' : ''} animated-btn`}
                 onClick={() => setActiveCase(type)}
               >
                 <div className="btn-icon">{icon}</div>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import { HandwritingGenerator } from '../pages/tools/HandwritingGenerator';
 import { 
   ChevronDown, 
@@ -37,7 +37,8 @@ import {
   List,
   QrCode,
   Barcode,
-  CreditCard
+  CreditCard,
+  Layers
 } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useTheme } from '../contexts/ThemeContext';
@@ -83,6 +84,20 @@ const TOOLS_REGISTRY: Record<string, Tool> = {
   'base64-encoder-decoder': { id: 'base64-encoder-decoder', name: 'Base64 Converter', href: '/tools/base64-encoder-decoder' },
   'html-encoder-decoder': { id: 'html-encoder-decoder', name: 'HTML Encoder/Decoder', href: '/tools/html-encoder-decoder' },
   'url-encoder-decoder': { id: 'url-encoder-decoder', name: 'URL Encoder/Decoder', href: '/tools/url-encoder-decoder' },
+  'html-minifier': { id: 'html-minifier', name: 'HTML Minifier', href: '/tools/html-minifier' },
+  'css-minifier': { id: 'css-minifier', name: 'CSS Minifier', href: '/tools/css-minifier' },
+  'javascript-minifier': { id: 'javascript-minifier', name: 'JavaScript Minifier', href: '/tools/javascript-minifier' },
+  'html-formatter': { id: 'html-formatter', name: 'HTML Formatter', href: '/tools/html-formatter' },
+  'css-formatter': { id: 'css-formatter', name: 'CSS Formatter', href: '/tools/css-formatter' },
+  'javascript-formatter': { id: 'javascript-formatter', name: 'JavaScript Formatter', href: '/tools/javascript-formatter' },
+  'md5-encrypt-decrypt': { id: 'md5-encrypt-decrypt', name: 'MD5 Hash Generator', href: '/tools/md5-encrypt-decrypt' },
+  'sha1-encrypt-decrypt': { id: 'sha1-encrypt-decrypt', name: 'SHA1 Hash Generator', href: '/tools/sha1-encrypt-decrypt' },
+  'sha224-encrypt-decrypt': { id: 'sha224-encrypt-decrypt', name: 'SHA224 Hash Generator', href: '/tools/sha224-encrypt-decrypt' },
+  'sha256-encrypt-decrypt': { id: 'sha256-encrypt-decrypt', name: 'SHA256 Hash Generator', href: '/tools/sha256-encrypt-decrypt' },
+  'sha384-encrypt-decrypt': { id: 'sha384-encrypt-decrypt', name: 'SHA384 Hash Generator', href: '/tools/sha384-encrypt-decrypt' },
+  'sha512-encrypt-decrypt': { id: 'sha512-encrypt-decrypt', name: 'SHA512 Hash Generator', href: '/tools/sha512-encrypt-decrypt' },
+  'jwt-encoder-decoder': { id: 'jwt-encoder-decoder', name: 'JWT Encoder/Decoder', href: '/tools/jwt-encoder-decoder' },
+  'json-tree-viewer': { id: 'json-tree-viewer', name: 'JSON Tree Viewer', href: '/tools/json-tree-viewer' },
   'instagram-filters': { id: 'instagram-filters', name: 'Instagram Filter Effects', href: '/tools/instagram-filters' },
   'instagram-post-generator': { id: 'instagram-post-generator', name: 'Instagram Post Creator', href: '/tools/instagram-post-generator' },
   'instagram-photo-downloader': { id: 'instagram-photo-downloader', name: 'Instagram Image/Video Downloader', href: '/tools/instagram-photo-downloader' },
@@ -93,8 +108,7 @@ const TOOLS_REGISTRY: Record<string, Tool> = {
   'list-randomizer': { id: 'list-randomizer', name: 'Item Shuffler', href: '/tools/list-randomizer' },
   'qr-code-generator': { id: 'qr-code-generator', name: 'QR Code Creator', href: '/tools/qr-code-generator' },
   'barcode-generator': { id: 'barcode-generator', name: 'Barcode Maker', href: '/tools/barcode-generator' },
-  'fake-iban-generator': { id: 'fake-iban-generator', name: 'Mock IBAN Generator', href: '/tools/fake-iban-generator' },
-  'graphics-editor': { id: 'graphics-editor', name: 'Graphics Editor', href: '/tools/graphics-editor' },
+  'bulk-barcode-qr-generator': { id: 'bulk-barcode-qr-generator', name: 'Bulk Barcode and QR Code Generator', href: '/tools/bulk-barcode-qr-generator' }
 };
 
 // Static categories configuration
@@ -112,6 +126,14 @@ const CATEGORIES_CONFIG: Category[] = [
     name: 'Bookmarked Tools',
     icon: <Star className="w-5 h-5 text-amber-400 fill-amber-400 drop-shadow-sm" />,
     tools: ['case-converter', 'lorem-ipsum-generator', 'letter-counter']
+  },
+  {
+    id: 'barcode-qr-tools',
+    name: 'Barcode and QR Code Tools',
+    icon: <QrCode className="w-5 h-5 text-green-400 drop-shadow-sm" />,
+    tools: [
+      'qr-code-generator', 'barcode-generator', 'bulk-barcode-qr-generator'
+    ]
   },
   {
     id: 'text-tools',
@@ -148,7 +170,12 @@ const CATEGORIES_CONFIG: Category[] = [
     icon: <Code className="w-5 h-5 text-rose-400 drop-shadow-sm" />,
     tools: [
       'code-to-image-converter', 'url-slug-generator', 'react-native-shadow-generator',
-      'base64-encoder-decoder', 'html-encoder-decoder', 'url-encoder-decoder'
+      'base64-encoder-decoder', 'html-encoder-decoder', 'url-encoder-decoder',
+      'html-minifier', 'css-minifier', 'javascript-minifier',
+      'html-formatter', 'css-formatter', 'javascript-formatter',
+      'md5-encrypt-decrypt', 'sha1-encrypt-decrypt', 'sha224-encrypt-decrypt',
+      'sha256-encrypt-decrypt', 'sha384-encrypt-decrypt', 'sha512-encrypt-decrypt',
+      'jwt-encoder-decoder', 'json-tree-viewer'
     ]
   },
   {
@@ -165,8 +192,7 @@ const CATEGORIES_CONFIG: Category[] = [
     name: 'Miscellaneous Tools',
     icon: <MoreHorizontal className="w-5 h-5 text-slate-300 drop-shadow-sm" />,
     tools: [
-      'strong-random-password-generator', 'list-randomizer', 'qr-code-generator',
-      'barcode-generator', 'fake-iban-generator'
+      'strong-random-password-generator', 'list-randomizer', 'fake-iban-generator'
     ]
   }
 ];
@@ -276,30 +302,29 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         <div className="sidebar-header-override relative">
           <Link to="/" className="flex items-center group">
-            <motion.span 
-              className={`bg-gradient-to-br from-emerald-400 via-cyan-400 to-blue-500 ${isDark ? 'text-slate-900' : 'text-white'} w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/25 transition-all duration-300`}
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Zap className="w-6 h-6" />
-            </motion.span>
-            {!isCollapsed && (
-              <motion.h1 
-                className="text-2xl font-bold ml-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+            <div className="sidebar-header-logo">
+              <motion.div 
+                className="sidebar-header-logo-icon"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Tools Dashboard
-              </motion.h1>
-            )}
+                <Zap className="w-6 h-6" />
+              </motion.div>
+              {!isCollapsed && (
+                <motion.h1 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                >
+                  Tools Dashboard
+                </motion.h1>
+              )}
+            </div>
           </Link>
           {!isCollapsed && (
             <motion.button
               onClick={toggleTheme}
-              className={`p-2.5 rounded-xl ${isDark 
-                ? 'bg-slate-700/50 hover:bg-slate-600/50 text-slate-300' 
-                : 'bg-slate-100/50 hover:bg-slate-200/50 text-slate-600'} transition-all duration-300 shadow-sm hover:shadow-md`}
+              className="sidebar-header-theme-toggle"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -315,9 +340,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className={`p-4 border-b ${isDark ? 'border-slate-700/50' : 'border-slate-200/50'}`}>
             <motion.button
               onClick={toggleTheme}
-              className={`w-12 h-12 mx-auto flex items-center justify-center rounded-xl ${isDark 
-                ? 'bg-slate-700/50 hover:bg-slate-600/50 text-slate-300' 
-                : 'bg-slate-100/50 hover:bg-slate-200/50 text-slate-600'} transition-all duration-300 shadow-sm hover:shadow-md`}
+              className="sidebar-header-theme-toggle"
               whileHover={{ scale: 1.1, rotate: 10 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -326,7 +349,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         )}
         
-        <div className="collapse-container-override flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+        <div className="collapse-container-override flex-1 overflow-y-auto overflow-x-hidden">
           {categories.map((category, index) => (
             <motion.div 
               key={category.id} 
@@ -451,7 +474,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {children}
+        <Outlet />
       </motion.div>
     </div>
   );

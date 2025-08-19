@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
@@ -9,7 +9,13 @@ import {
   Palette, 
   Code, 
   Share2, 
-  MoreHorizontal
+  MoreHorizontal,
+  Search,
+  Grid,
+  List,
+  TrendingUp,
+  Clock,
+  Filter
 } from 'lucide-react';
 
 interface Tool {
@@ -125,56 +131,243 @@ const categories: Category[] = [
 
 const DashboardContent: React.FC = () => {
   const { isDark } = useTheme();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const totalTools = Object.keys(TOOLS_REGISTRY).length;
+    const totalCategories = categories.length;
+    const favoriteTools = categories.find(cat => cat.id === 'favorite-tools')?.tools.length || 0;
+    
+    return {
+      totalTools,
+      totalCategories,
+      favoriteTools
+    };
+  }, []);
+
+  // Filter tools based on search term and selected category
+  const filteredCategories = useMemo(() => {
+    if (!searchTerm && !selectedCategory) {
+      return categories;
+    }
+
+    return categories
+      .filter(category => {
+        // Filter by selected category
+        if (selectedCategory && category.id !== selectedCategory) {
+          return false;
+        }
+        
+        // Filter by search term
+        if (searchTerm) {
+          const matchesCategory = category.name.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesTools = category.tools.some(tool => 
+            tool.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          return matchesCategory || matchesTools;
+        }
+        
+        return true;
+      })
+      .map(category => {
+        if (!searchTerm) return category;
+        
+        // Filter tools within category based on search term
+        const filteredTools = category.tools.filter(tool => 
+          tool.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        
+        return {
+          ...category,
+          tools: filteredTools
+        };
+      })
+      .filter(category => category.tools.length > 0); // Remove categories with no matching tools
+  }, [searchTerm, selectedCategory]);
+
   return (
-    <div className="p-8 overflow-y-auto">
-      <div className="max-w-6xl mx-auto">
+    <div className="p-6 overflow-y-auto">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="mb-8"
         >
           <h1 className="text-4xl font-bold text-white mb-2">Tools Dashboard</h1>
-          <p className="text-gray-300 mb-8 text-lg">Browse through all available tools organized by category</p>
+          <p className={`text-gray-300 mb-6 text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Browse through all available tools organized by category</p>
+          
+          {/* Stats Cards */}
+          <div className="dashboard-stats-grid">
+            <motion.div 
+              className="dashboard-stat-card"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="dashboard-stat-header">
+                <div className="dashboard-stat-icon">
+                  <Grid className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <p className="dashboard-stat-title">Total Tools</p>
+                  <p className="dashboard-stat-value">{stats.totalTools}</p>
+                </div>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="dashboard-stat-card"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="dashboard-stat-header">
+                <div className="dashboard-stat-icon">
+                  <List className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="dashboard-stat-title">Categories</p>
+                  <p className="dashboard-stat-value">{stats.totalCategories}</p>
+                </div>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="dashboard-stat-card"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="dashboard-stat-header">
+                <div className="dashboard-stat-icon">
+                  <Star className="w-6 h-6 text-amber-400 fill-amber-400" />
+                </div>
+                <div>
+                  <p className="dashboard-stat-title">Bookmarked</p>
+                  <p className="dashboard-stat-value">{stats.favoriteTools}</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+          
+          {/* Search and Filters */}
+          <div className="dashboard-controls">
+            <div className="dashboard-search-container">
+              <div className="dashboard-search-icon">
+                <Search className="h-5 w-5" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search tools..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <div className="dashboard-view-toggle">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`dashboard-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                >
+                  <Grid className="w-5 h-5" />
+                </button>
+                
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`dashboard-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <select
+                value={selectedCategory || ''}
+                onChange={(e) => setSelectedCategory(e.target.value || null)}
+                className="dashboard-category-filter"
+              >
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category, index) => (
-            <motion.div 
-              key={category.id}
-              className={`${isDark 
-                ? 'bg-gradient-to-br from-slate-800/80 via-slate-700/60 to-slate-800/40 border-slate-600/30 hover:border-slate-500/50' 
-                : 'bg-gradient-to-br from-white/80 via-slate-50/60 to-white/40 border-slate-200/30 hover:border-slate-300/50'} backdrop-blur-xl rounded-2xl shadow-2xl p-6 border transition-all duration-300`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              whileHover={{ y: -8, boxShadow: isDark ? "0 25px 50px -12px rgba(59, 130, 246, 0.15)" : "0 25px 50px -12px rgba(59, 130, 246, 0.1)" }}
-            >
-              <div className="flex items-center mb-4">
-                <span className={`mr-3 p-2 ${isDark 
-                  ? 'bg-gradient-to-br from-slate-700/80 to-slate-800/60' 
-                  : 'bg-gradient-to-br from-slate-100/80 to-slate-200/60'} rounded-xl shadow-lg`}>
-                  {category.icon}
-                </span>
-                <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{category.name}</h2>
-              </div>
-              <ul className="space-y-3">
-                {category.tools.map((tool) => (
-                  <li key={tool.id}>
-                    <Link 
-                      to={tool.href} 
-                      className={`${isDark 
-                        ? 'text-emerald-400 hover:text-cyan-300' 
-                        : 'text-emerald-600 hover:text-cyan-600'} font-medium flex items-center group transition-colors duration-200`}
-                    >
-                      <span className="w-1.5 h-1.5 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mr-2 group-hover:from-cyan-300 group-hover:to-blue-300 transition-all duration-200 shadow-sm"></span>
-                      {tool.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
+        {/* Categories */}
+        {filteredCategories.length === 0 ? (
+          <motion.div 
+            className="dashboard-no-results"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <p>No tools found matching your search.</p>
+          </motion.div>
+        ) : (
+          <div className={viewMode === 'grid' 
+            ? "dashboard-tools-grid" 
+            : "dashboard-tools-list"
+          }>
+            {filteredCategories.map((category, index) => (
+              <motion.div 
+                key={category.id}
+                className={`dashboard-category-card ${viewMode === 'list' ? 'flex items-start' : ''}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                whileHover={{ y: viewMode === 'grid' ? -8 : 0 }}
+              >
+                {viewMode === 'list' ? (
+                  <>
+                    <div className="dashboard-category-header mb-0 mr-6">
+                      <span className="dashboard-category-icon">
+                        {category.icon}
+                      </span>
+                      <h2 className="dashboard-category-title">{category.name}</h2>
+                    </div>
+                    <div className="dashboard-tools-list-container flex-1">
+                      {category.tools.map((tool) => (
+                        <Link 
+                          key={tool.id}
+                          to={tool.href} 
+                          className="dashboard-tool-link"
+                        >
+                          <span className="dashboard-tool-bullet"></span>
+                          {tool.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="dashboard-category-header">
+                      <span className="dashboard-category-icon">
+                        {category.icon}
+                      </span>
+                      <h2 className="dashboard-category-title">{category.name}</h2>
+                    </div>
+                    <ul className="space-y-3">
+                      {category.tools.map((tool) => (
+                        <li key={tool.id}>
+                          <Link 
+                            to={tool.href} 
+                            className="dashboard-tool-link"
+                          >
+                            <span className="dashboard-tool-bullet"></span>
+                            {tool.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

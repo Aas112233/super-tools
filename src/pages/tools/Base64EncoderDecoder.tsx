@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Copy, Check, ArrowUpDown, FileText, Image as ImageIcon } from 'lucide-react';
 
 export const Base64EncoderDecoder: React.FC = () => {
@@ -8,6 +8,7 @@ export const Base64EncoderDecoder: React.FC = () => {
   const [inputType, setInputType] = useState<'text' | 'file'>('text');
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
+  const convertButtonRef = useRef<HTMLButtonElement>(null);
 
   const base64Encode = (str: string): string => {
     try {
@@ -48,6 +49,21 @@ export const Base64EncoderDecoder: React.FC = () => {
   React.useEffect(() => {
     processText();
   }, [processText]);
+
+  // Add button animation effect
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    
+    if (convertButtonRef.current) {
+      cleanup = addButtonAnimation(convertButtonRef.current);
+    }
+    
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -229,10 +245,10 @@ export const Base64EncoderDecoder: React.FC = () => {
                 width: 'auto',
                 margin: 0
               }}
-              title="Copy to clipboard"
             >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check size={16} /> : <Copy size={16} />}
             </button>
+
           </div>
 
           {output && (
@@ -259,6 +275,58 @@ export const Base64EncoderDecoder: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <button
+        ref={convertButtonRef}
+        onClick={processText}
+        style={{ 
+          marginTop: '1.5rem',
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'
+        }}
+        className="copy-btn"
+        onMouseEnter={(e) => {
+          const target = e.target as HTMLButtonElement;
+          target.style.transform = 'translateY(-3px)';
+          target.style.boxShadow = 'var(--shadow-xl)';
+          
+          // Create shine effect
+          let shine = target.querySelector('.shine-effect') as HTMLElement;
+          if (!shine) {
+            shine = document.createElement('span');
+            shine.className = 'shine-effect';
+            shine.style.position = 'absolute';
+            shine.style.top = '0';
+            shine.style.left = '-100%';
+            shine.style.width = '100%';
+            shine.style.height = '100%';
+            shine.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)';
+            shine.style.transition = 'left 0.5s';
+            shine.style.pointerEvents = 'none';
+            target.appendChild(shine);
+          }
+          setTimeout(() => {
+            if (shine) {
+              shine.style.left = '100%';
+            }
+          }, 10);
+        }}
+        onMouseLeave={(e) => {
+          const target = e.target as HTMLButtonElement;
+          target.style.transform = '';
+          target.style.boxShadow = '';
+          
+          // Reset shine effect
+          const shine = target.querySelector('.shine-effect') as HTMLElement;
+          if (shine) {
+            shine.style.left = '-100%';
+          }
+        }}
+      >
+        <ArrowUpDown style={{ marginRight: '0.5rem' }} size={20} />
+        {mode === 'encode' ? 'Encode' : 'Decode'}
+      </button>
     </div>
   );
 };

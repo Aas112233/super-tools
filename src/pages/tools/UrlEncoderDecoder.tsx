@@ -117,40 +117,22 @@ export const UrlEncoderDecoder: React.FC = () => {
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
                 onClick={() => setMode('encode')}
-                className={`case-btn ${mode === 'encode' ? 'active' : ''}`}
+                className={`case-btn ${mode === 'encode' ? 'active' : ''} animated-btn-sm`}
                 style={{ padding: '0.75rem 1.5rem' }}
               >
                 Encode
               </button>
               <button
                 onClick={() => setMode('decode')}
-                className={`case-btn ${mode === 'decode' ? 'active' : ''}`}
+                className={`case-btn ${mode === 'decode' ? 'active' : ''} animated-btn-sm`}
                 style={{ padding: '0.75rem 1.5rem' }}
               >
                 Decode
               </button>
             </div>
-            
-            <button
-              onClick={swapInputOutput}
-              className="case-btn"
-              style={{ padding: '0.75rem', minWidth: 'auto' }}
-              title="Swap input and output"
-            >
-              <ArrowUpDown className="w-4 h-4" />
-            </button>
-            
-            <button
-              onClick={loadExample}
-              className="case-btn"
-              style={{ padding: '0.75rem 1.5rem' }}
-            >
-              Example
-            </button>
-            
             <button
               onClick={clearAll}
-              className="case-btn"
+              className="case-btn animated-btn-sm"
               style={{ padding: '0.75rem 1.5rem' }}
             >
               Clear
@@ -161,7 +143,7 @@ export const UrlEncoderDecoder: React.FC = () => {
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
               <button
                 onClick={() => setEncodeType('component')}
-                className={`case-btn ${encodeType === 'component' ? 'active' : ''}`}
+                className={`case-btn ${encodeType === 'component' ? 'active' : ''} animated-btn-xs`}
                 style={{ padding: '0.5rem 1rem' }}
                 title="Encodes all special characters (recommended)"
               >
@@ -169,7 +151,7 @@ export const UrlEncoderDecoder: React.FC = () => {
               </button>
               <button
                 onClick={() => setEncodeType('uri')}
-                className={`case-btn ${encodeType === 'uri' ? 'active' : ''}`}
+                className={`case-btn ${encodeType === 'uri' ? 'active' : ''} animated-btn-xs`}
                 style={{ padding: '0.5rem 1rem' }}
                 title="Preserves URI structure characters"
               >
@@ -177,6 +159,7 @@ export const UrlEncoderDecoder: React.FC = () => {
               </button>
             </div>
           )}
+
         </div>
       </div>
 
