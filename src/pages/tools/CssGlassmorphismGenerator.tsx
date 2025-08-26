@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CssGlassmorphismGenerator: React.FC = () => {
+export default function CssGlassmorphismGenerator() {
   const [blur, setBlur] = useState(16);
   const [transparency, setTransparency] = useState(0.25);
   const [borderRadius, setBorderRadius] = useState(10);

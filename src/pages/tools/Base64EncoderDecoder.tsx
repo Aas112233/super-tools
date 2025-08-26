@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Copy, Check, ArrowUpDown, FileText, Image as ImageIcon } from 'lucide-react';
 
-export const Base64EncoderDecoder: React.FC = () => {
+export default function Base64EncoderDecoder() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');

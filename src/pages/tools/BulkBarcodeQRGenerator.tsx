@@ -4,7 +4,7 @@ import JsBarcode from 'jsbarcode';
 import { QRCodeSVG } from 'qrcode.react';
 import JSZip from 'jszip';
 
-export const BulkBarcodeQRGenerator: React.FC = () => {
+export default function BulkBarcodeQRGenerator() {
   const [items, setItems] = useState<Array<{id: number, text: string, type: 'barcode' | 'qrcode'}>>([
     { id: 1, text: 'Item 1', type: 'barcode' },
     { id: 2, text: 'https://example.com', type: 'qrcode' }
@@ -382,26 +382,19 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
         <p>Generate multiple barcodes and QR codes at once. Add items, customize types, and download as a ZIP archive.</p>
       </div>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1fr', 
-        gap: '2rem',
-        '@media (max-width: 768px)': {
-          gridTemplateColumns: '1fr'
-        }
-      }}>
-        {/* Settings Column */}
+      <div className="bulk-tool-grid">
+        {/* Left Column - Settings */}
         <div className="input-section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h2 style={{ margin: 0 }}>Items List</h2>
+            <h2 style={{ margin: 0, color: 'hsl(var(--foreground))' }}>Items List</h2>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
                 onClick={addItem}
                 style={{
                   padding: '0.5rem 1rem',
-                  background: 'var(--accent-light)',
-                  color: 'var(--accent-color)',
-                  border: '1px solid var(--border-color)',
+                  background: 'hsl(var(--accent) / 0.1)',
+                  color: 'hsl(var(--accent))',
+                  border: '1px solid hsl(var(--border))',
                   borderRadius: '8px',
                   fontWeight: '600',
                   cursor: 'pointer',
@@ -458,9 +451,9 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                 onClick={importFromCSV}
                 style={{
                   padding: '0.5rem 1rem',
-                  background: 'var(--bg-tertiary)',
-                  color: 'var(--text-primary)',
-                  border: '1px solid var(--border-color)',
+                  background: 'hsl(var(--input))',
+                  color: 'hsl(var(--foreground))',
+                  border: '1px solid hsl(var(--border))',
                   borderRadius: '8px',
                   fontWeight: '600',
                   cursor: 'pointer',
@@ -529,8 +522,8 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
 
           {error && (
             <div style={{
-              background: 'var(--error-light)',
-              color: 'var(--error-color)',
+              background: 'hsl(var(--destructive) / 0.1)',
+              color: 'hsl(var(--destructive))',
               padding: '1rem',
               borderRadius: '12px',
               marginBottom: '1.5rem',
@@ -544,7 +537,7 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
 
           {/* Bulk Text Input Section */}
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="bulk-text" style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <label htmlFor="bulk-text" style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--foreground))', fontWeight: '600' }}>
               Bulk Paste Text
             </label>
             <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
@@ -559,21 +552,21 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                   width: '100%',
                   padding: '1rem 1rem 1rem 3rem',
                   borderRadius: '12px',
-                  border: '2px solid var(--border-color)',
-                  background: 'var(--bg-tertiary)',
-                  color: 'var(--text-primary)',
+                  border: '2px solid hsl(var(--border))',
+                  background: 'hsl(var(--input))',
+                  color: 'hsl(var(--foreground))',
                   fontSize: '1rem',
                   transition: 'all 0.3s ease',
                   resize: 'vertical'
                 }}
-                onFocus={(e) => e.target.style.borderColor = 'var(--accent-color)'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                onFocus={(e) => e.target.style.borderColor = 'hsl(var(--ring))'}
+                onBlur={(e) => e.target.style.borderColor = 'hsl(var(--border))'}
               />
               <div style={{
                 position: 'absolute',
                 left: '1rem',
                 top: '1rem',
-                color: 'var(--text-muted)'
+                color: 'hsl(var(--muted-foreground))'
               }}>
                 <Clipboard size={20} />
               </div>
@@ -582,9 +575,9 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                 style={{
                   right: '0.5rem',
                   top: '0.5rem',
-                  background: 'var(--accent-light)',
-                  color: 'var(--accent-color)',
-                  border: '1px solid var(--border-color)',
+                  background: 'hsl(var(--accent) / 0.1)',
+                  color: 'hsl(var(--accent))',
+                  border: '1px solid hsl(var(--border))',
                   borderRadius: '6px',
                   padding: '0.25rem 0.5rem',
                   fontSize: '0.8rem',
@@ -640,7 +633,7 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
               onClick={processBulkText}
               style={{
                 padding: '0.5rem 1rem',
-                background: 'var(--accent-color)',
+                background: 'hsl(var(--accent))',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -699,12 +692,18 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: '1rem', 
+            marginBottom: '1.5rem'
+          }}>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <button
               onClick={generateAll}
               style={{
                 padding: '1rem 2rem',
-                background: 'linear-gradient(135deg, var(--accent-color) 0%, #6366f1 100%)',
+                background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '16px',
@@ -789,8 +788,8 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
               onClick={downloadAll}
               style={{
                 padding: '1rem 2rem',
-                background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--border-color) 100%)',
-                color: 'var(--text-primary)',
+                background: 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--border)) 100%)',
+                color: 'hsl(var(--foreground))',
                 border: 'none',
                 borderRadius: '16px',
                 fontWeight: '600',
@@ -844,25 +843,28 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
               <Download size={20} />
               Download ZIP
             </button>
+            </div>
           </div>
 
           {/* Items List */}
           <div style={{ 
             maxHeight: '300px', 
             overflowY: 'auto', 
-            border: '1px solid var(--border-color)',
+            border: '1px solid hsl(var(--border))',
             borderRadius: '12px',
-            marginBottom: '1.5rem'
+            marginBottom: '1.5rem',
+            background: 'hsl(var(--card))'
           }}>
             {items.map((item) => (
               <div 
                 key={item.id}
                 style={{
                   display: 'flex',
-                  gap: '1rem',
-                  padding: '1rem',
-                  borderBottom: '1px solid var(--border-color)',
-                  alignItems: 'center'
+                  gap: '0.75rem',
+                  padding: '0.75rem',
+                  borderBottom: items.indexOf(item) < items.length - 1 ? '1px solid hsl(var(--border))' : 'none',
+                  alignItems: 'center',
+                  background: 'hsl(var(--background))'
                 }}
               >
                 <div style={{ flex: 1 }}>
@@ -873,13 +875,16 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                     placeholder="Enter text or URL"
                     style={{
                       width: '100%',
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      border: '1px solid var(--border-color)',
-                      background: 'var(--bg-tertiary)',
-                      color: 'var(--text-primary)',
-                      fontSize: '1rem'
+                      padding: '0.5rem',
+                      borderRadius: '6px',
+                      border: '1px solid hsl(var(--border))',
+                      background: 'hsl(var(--input))',
+                      color: 'hsl(var(--foreground))',
+                      fontSize: '0.9rem',
+                      transition: 'border-color 0.2s ease'
                     }}
+                    onFocus={(e) => e.target.style.borderColor = 'hsl(var(--ring))'}
+                    onBlur={(e) => e.target.style.borderColor = 'hsl(var(--border))'}
                   />
                 </div>
                 
@@ -888,14 +893,17 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                     value={item.type}
                     onChange={(e) => updateItemType(item.id, e.target.value as 'barcode' | 'qrcode')}
                     style={{
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      border: '1px solid var(--border-color)',
-                      background: 'var(--bg-tertiary)',
-                      color: 'var(--text-primary)',
-                      fontSize: '1rem',
-                      minWidth: '120px'
+                      padding: '0.5rem',
+                      borderRadius: '6px',
+                      border: '1px solid hsl(var(--border))',
+                      background: 'hsl(var(--input))',
+                      color: 'hsl(var(--foreground))',
+                      fontSize: '0.9rem',
+                      minWidth: '100px',
+                      transition: 'border-color 0.2s ease'
                     }}
+                    onFocus={(e) => e.target.style.borderColor = 'hsl(var(--ring))'}
+                    onBlur={(e) => e.target.style.borderColor = 'hsl(var(--border))'}
                   >
                     <option value="barcode">Barcode</option>
                     <option value="qrcode">QR Code</option>
@@ -907,15 +915,17 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                     onClick={() => removeItem(item.id)}
                     disabled={items.length <= 1}
                     style={{
-                      padding: '0.75rem',
-                      background: 'var(--error-light)',
-                      color: 'var(--error-color)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
+                      padding: '0.5rem',
+                      background: items.length <= 1 ? 'hsl(var(--muted))' : 'hsl(var(--destructive) / 0.1)',
+                      color: items.length <= 1 ? 'hsl(var(--muted-foreground))' : 'hsl(var(--destructive))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '6px',
+                      cursor: items.length <= 1 ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      minWidth: '36px',
+                      transition: 'all 0.2s ease'
                     }}
                   >
                     <Trash2 size={16} />
@@ -926,17 +936,17 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
           </div>
 
           <div style={{
-            background: 'var(--accent-light)',
-            border: '2px solid var(--border-color)',
+            background: 'hsl(var(--accent) / 0.1)',
+            border: '2px solid hsl(var(--border))',
             borderRadius: '16px',
             padding: '1.5rem',
             marginTop: '2rem'
           }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'hsl(var(--foreground))', fontSize: '1.1rem', fontWeight: '600' }}>
               <Info size={20} />
               How to Use
             </h3>
-            <ul style={{ paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <ul style={{ paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'hsl(var(--foreground))' }}>
               <li><strong>Add items</strong> by clicking the "Add Item" button</li>
               <li><strong>Bulk paste</strong> by pasting text (one item per line) and clicking "Process Bulk Text"</li>
               <li><strong>Enter text</strong> for each item (URLs for QR codes, product codes for barcodes)</li>
@@ -948,21 +958,23 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
           </div>
         </div>
 
-        {/* Preview Column */}
+        {/* Right Column - Preview */}
         <div className="output-section">
-          <label>Preview</label>
+          <label style={{ color: 'hsl(var(--foreground))', fontWeight: '600', fontSize: '1.1rem' }}>Preview</label>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-            gap: '1.5rem',
-            textAlign: 'center'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+            gap: '1rem',
+            textAlign: 'center',
+            maxHeight: '500px',
+            overflowY: 'auto'
           }}>
             {items.slice(0, 6).map((item) => (
               <div key={item.id} style={{ 
                 padding: '1rem', 
-                border: '1px solid var(--border-color)', 
+                border: '1px solid hsl(var(--border))', 
                 borderRadius: '12px',
-                background: 'var(--bg-tertiary)'
+                background: 'hsl(var(--card))'
               }}>
                 <div style={{ 
                   height: '100px', 
@@ -1016,13 +1028,14 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                   fontWeight: '600',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  color: 'hsl(var(--foreground))'
                 }}>
                   {item.text}
                 </div>
                 <div style={{ 
                   fontSize: '0.7rem', 
-                  color: 'var(--text-muted)',
+                  color: 'hsl(var(--muted-foreground))',
                   marginTop: '0.25rem'
                 }}>
                   {item.type === 'barcode' ? 'Barcode' : 'QR Code'}
@@ -1036,7 +1049,7 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                 alignItems: 'center', 
                 justifyContent: 'center',
                 fontStyle: 'italic',
-                color: 'var(--text-muted)'
+                color: 'hsl(var(--muted-foreground))'
               }}>
                 +{items.length - 6} more items
               </div>
@@ -1047,7 +1060,7 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
                 gridColumn: '1 / -1',
                 textAlign: 'center',
                 padding: '2rem',
-                color: 'var(--text-muted)'
+                color: 'hsl(var(--muted-foreground))'
               }}>
                 Add items to generate barcodes and QR codes
               </div>
@@ -1055,17 +1068,17 @@ export const BulkBarcodeQRGenerator: React.FC = () => {
           </div>
 
           <div style={{
-            background: 'var(--accent-light)',
-            border: '2px solid var(--border-color)',
+            background: 'hsl(var(--accent) / 0.1)',
+            border: '2px solid hsl(var(--border))',
             borderRadius: '16px',
             padding: '1.5rem',
             marginTop: '2rem'
           }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'hsl(var(--foreground))', fontSize: '1.1rem', fontWeight: '600' }}>
               <Info size={20} />
               CSV Import Format
             </h3>
-            <p style={{ fontFamily: 'monospace', background: 'var(--bg-tertiary)', padding: '1rem', borderRadius: '8px' }}>
+            <p style={{ fontFamily: 'monospace', background: 'hsl(var(--muted))', padding: '1rem', borderRadius: '8px', color: 'hsl(var(--foreground))' }}>
               Item 1,barcode<br />
               https://example.com,qrcode<br />
               Product123,barcode<br />

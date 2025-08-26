@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CssSwitchGenerator: React.FC = () => {
+export default function CssSwitchGenerator() {
   const [selectedSwitch, setSelectedSwitch] = useState('normal');
   const [primaryColor, setPrimaryColor] = useState('#40bfc1');
   const [secondaryColor, setSecondaryColor] = useState('#f0134d');

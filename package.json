@@ -1,6 +1,7 @@
 {
   "name": "tools-dashboard",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -8,6 +9,7 @@
     "@mui/material": "^7.3.1",
     "axios": "^1.11.0",
     "css-loader": "^7.1.2",
+    "echarts": "^5.5.1",
     "framer-motion": "^10.16.4",
     "html2canvas": "^1.4.1",
     "jsbarcode": "^3.12.1",

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export const CaseConverter: React.FC = () => {
+export default function CaseConverter() {
   const [text, setText] = useState('');
   const [activeCase, setActiveCase] = useState('upper');
   const [copied, setCopied] = useState(false);

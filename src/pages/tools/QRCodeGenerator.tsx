@@ -121,11 +121,8 @@ export const QRCodeGenerator: React.FC = () => {
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: '1fr 1fr', 
-        gap: '2rem',
-        '@media (max-width: 768px)': {
-          gridTemplateColumns: '1fr'
-        }
-      }}>
+        gap: '2rem'
+      }} className="qr-grid-container">
         {/* Input Column */}
         <div className="input-section">
           <div style={{ marginBottom: '1.5rem' }}>

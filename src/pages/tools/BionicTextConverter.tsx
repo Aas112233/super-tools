@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export const BionicTextConverter: React.FC = () => {
+export default function BionicTextConverter() {
   const [text, setText] = useState('');
   const [boldPercentage, setBoldPercentage] = useState(50);
   const [copied, setCopied] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CssClipPathGenerator: React.FC = () => {
+export default function CssClipPathGenerator() {
   const [selectedShape, setSelectedShape] = useState('triangle');
   const [clipPath, setClipPath] = useState('polygon(50% 0%, 0% 100%, 100% 100%)');
 

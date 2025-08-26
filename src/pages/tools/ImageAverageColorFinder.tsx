@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const GraphicsEditor: React.FC = () => {
+const ImageAverageColorFinder: React.FC = () => {
   return (
     <div className="tool-container">
       <div className="tool-header">
-        <h1>Graphics Editor</h1>
-        <p>Edit and enhance your images</p>
+        <h1>Image Average Color Finder</h1>
+        <p>Find the average color of any image</p>
       </div>
       <div className="tool-content">
         <p>This tool is not yet implemented.</p>
@@ -14,4 +14,4 @@ const GraphicsEditor: React.FC = () => {
   );
 };
 
-export default GraphicsEditor;
+export default ImageAverageColorFinder;

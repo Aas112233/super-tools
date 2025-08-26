@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CssLoaderGenerator: React.FC = () => {
+export default function CssLoaderGenerator() {
   const [selectedLoader, setSelectedLoader] = useState('spinner');
   const [primaryColor, setPrimaryColor] = useState('#3b82f6');
   const [size, setSize] = useState(40);

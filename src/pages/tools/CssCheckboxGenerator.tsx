@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CssCheckboxGenerator: React.FC = () => {
+export default function CssCheckboxGenerator() {
   const [selectedCheckbox, setSelectedCheckbox] = useState('check-a');
   const [primaryColor, setPrimaryColor] = useState('#4CAF50');
   const [uncheckedColor, setUncheckedColor] = useState('#ccc');
