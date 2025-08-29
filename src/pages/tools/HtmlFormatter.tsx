@@ -1,76 +1,235 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Copy, Check, FileText, Code, Settings } from 'lucide-react';
 
-export const HtmlFormatter: React.FC = () => {
+const HtmlFormatter: React.FC = () => {
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [indentSize, setIndentSize] = useState('2');
+  const [wrapLines, setWrapLines] = useState(false);
+  const [uppercaseTags, setUppercaseTags] = useState(false);
+
+  const formatHTML = () => {
+    if (!input.trim()) return;
+    // Basic HTML formatting logic would go here
+    setOutput(input); // Placeholder
+  };
+
+  const copyToClipboard = async () => {
+    if (output) {
+      await navigator.clipboard.writeText(output);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const clearAll = () => {
+    setInput('');
+    setOutput('');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent mb-4">
-            HTML Formatter
-          </h1>
-          <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Format and prettify your HTML code with proper indentation and structure for better readability.
-          </p>
+    <div className="tool-container">
+      <div className="tool-header">
+        <h1 className="tool-title">🎨 HTML Formatter</h1>
+        <p className="tool-subtitle">Format and prettify your HTML code with proper indentation and structure</p>
+      </div>
+
+      <div className="desktop-layout">
+        <div className="input-section">
+          <div className="section-header">
+            <h2 className="section-title">📝 Input & Preview</h2>
+            <p className="section-subtitle">Paste your HTML code and see it formatted beautifully</p>
+          </div>
+
+          <div className="input-group">
+            <label className="input-label">
+              <span className="label-icon"><FileText className="w-4 h-4" /></span>
+              <span className="label-text">HTML Code</span>
+            </label>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={`<!DOCTYPE html><html><head><title>Document</title></head><body><div class="container"><h1>Hello World</h1><p>This is a sample HTML document that needs formatting.</p><ul><li>Item 1</li><li>Item 2</li></ul></div></body></html>`}
+              className="enhanced-textarea"
+              rows={12}
+              style={{ fontFamily: 'Monaco, Consolas, "Courier New", monospace' }}
+            />
+            <div className="text-counter">{input.length} characters</div>
+          </div>
+
+          <div className="preview-section">
+            <label className="preview-label">
+              <span className="label-icon"><Code className="w-4 h-4" /></span>
+              <span className="label-text">Formatted Output</span>
+              <div className="preview-tags">
+                <span className="preview-tag">✨ Beautified</span>
+                <span className="preview-tag">📐 {indentSize} spaces</span>
+              </div>
+            </label>
+            <div className="preview-container">
+              <div className="relative">
+                <textarea
+                  value={output}
+                  readOnly
+                  placeholder="Formatted HTML will appear here...\n\nClick 'Format HTML' to beautify your code!"
+                  className="enhanced-textarea"
+                  rows={12}
+                  style={{ 
+                    fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                    background: 'rgba(248, 250, 252, 0.8)',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                />
+                <button
+                  onClick={copyToClipboard}
+                  disabled={!output}
+                  className={`copy-btn ${copied ? 'copied' : ''} ${!output ? 'disabled' : ''}`}
+                  style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                    padding: '0.5rem',
+                    minWidth: 'auto'
+                  }}
+                >
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+            
+            <div className="action-buttons">
+              <button 
+                className={`action-btn primary ${!input.trim() ? 'disabled' : ''}`}
+                onClick={formatHTML}
+                disabled={!input.trim()}
+              >
+                <span className="btn-icon">✨</span>
+                <span className="btn-text">Format HTML</span>
+              </button>
+              
+              <button 
+                className="action-btn secondary"
+                onClick={clearAll}
+              >
+                <span className="btn-icon">🗑️</span>
+                <span className="btn-text">Clear All</span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 md:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Input Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-200">Input HTML</h2>
-              <div className="relative">
-                <textarea
-                  placeholder="Paste your HTML code here..."
-                  className="w-full h-64 p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-blue-400 focus:outline-none resize-none"
-                />
+        <div className="output-section">
+          <div className="section-header">
+            <h2 className="section-title">⚙️ Formatting Options</h2>
+            <p className="section-subtitle">Customize your HTML formatting preferences</p>
+          </div>
+
+          <div className="controls-wrapper">
+            <div className="control-group enhanced">
+              <label className="control-label">
+                <span className="control-icon"><Settings className="w-4 h-4" /></span>
+                <span className="control-title">Indentation</span>
+              </label>
+              
+              <div className="style-controls">
+                <div className="control-item">
+                  <label className="control-item-label">Indent Size:</label>
+                  <select 
+                    value={indentSize} 
+                    onChange={(e) => setIndentSize(e.target.value)} 
+                    className="styled-select"
+                  >
+                    <option value="2">2 spaces</option>
+                    <option value="4">4 spaces</option>
+                    <option value="tab">Tab</option>
+                  </select>
+                </div>
               </div>
             </div>
 
-            {/* Output Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-200">Formatted HTML</h2>
-              <div className="relative">
-                <textarea
-                  placeholder="Formatted HTML will appear here..."
-                  readOnly
-                  className="w-full h-64 p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 resize-none"
-                />
+            <div className="control-group enhanced">
+              <label className="control-label">
+                <span className="control-icon">🎨</span>
+                <span className="control-title">Formatting Options</span>
+              </label>
+              
+              <div className="style-controls">
+                <div className="control-item checkbox-item">
+                  <input 
+                    type="checkbox" 
+                    id="wrap-lines" 
+                    checked={wrapLines}
+                    onChange={(e) => setWrapLines(e.target.checked)}
+                    className="styled-checkbox"
+                  />
+                  <label htmlFor="wrap-lines" className="checkbox-label">
+                    Wrap long lines
+                  </label>
+                </div>
+                
+                <div className="control-item checkbox-item">
+                  <input 
+                    type="checkbox" 
+                    id="uppercase-tags" 
+                    checked={uppercaseTags}
+                    onChange={(e) => setUppercaseTags(e.target.checked)}
+                    className="styled-checkbox"
+                  />
+                  <label htmlFor="uppercase-tags" className="checkbox-label">
+                    Uppercase HTML tags
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Controls */}
-          <div className="flex flex-wrap gap-4 mt-6">
-            <button className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-colors">
-              Format HTML
-            </button>
-            <button className="px-6 py-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 rounded-xl font-medium transition-colors">
-              Copy to Clipboard
-            </button>
-            <button className="px-6 py-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 rounded-xl font-medium transition-colors">
-              Clear All
-            </button>
-          </div>
+            {/* HTML Statistics */}
+            {input && (
+              <div className="control-group enhanced" style={{gridColumn: '1 / -1'}}>
+                <label className="control-label">
+                  <span className="control-icon">📊</span>
+                  <span className="control-title">HTML Statistics</span>
+                </label>
+                <div className="text-stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-value">{input.length}</span>
+                    <span className="stat-label">Characters</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{(input.match(/<[^>]+>/g) || []).length}</span>
+                    <span className="stat-label">HTML Tags</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{input.split('\n').length}</span>
+                    <span className="stat-label">Lines</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
-          {/* Options */}
-          <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-700 rounded-xl">
-            <h3 className="font-medium text-slate-800 dark:text-slate-200 mb-3">Formatting Options</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm text-slate-700 dark:text-slate-300 mb-1">Indent Size</label>
-                <select className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
-                  <option>2 spaces</option>
-                  <option>4 spaces</option>
-                  <option>Tab</option>
-                </select>
-              </div>
-              <div className="flex items-center">
-                <input type="checkbox" id="wrap-lines" className="mr-2" />
-                <label htmlFor="wrap-lines" className="text-slate-700 dark:text-slate-300">Wrap long lines</label>
-              </div>
-              <div className="flex items-center">
-                <input type="checkbox" id="uppercase" className="mr-2" />
-                <label htmlFor="uppercase" className="text-slate-700 dark:text-slate-300">Uppercase tags</label>
+            {/* HTML Formatting Tips */}
+            <div className="control-group enhanced" style={{gridColumn: '1 / -1'}}>
+              <label className="control-label">
+                <span className="control-icon">💡</span>
+                <span className="control-title">HTML Formatting Tips</span>
+              </label>
+              <div className="tips-container">
+                <div className="tip-item">
+                  <span className="tip-icon">✨</span>
+                  <span className="tip-text">Use consistent indentation for nested elements</span>
+                </div>
+                <div className="tip-item">
+                  <span className="tip-icon">🎯</span>
+                  <span className="tip-text">Keep attributes on separate lines for readability</span>
+                </div>
+                <div className="tip-item">
+                  <span className="tip-icon">📝</span>
+                  <span className="tip-text">Add comments to explain complex structures</span>
+                </div>
+                <div className="tip-item">
+                  <span className="tip-icon">🔧</span>
+                  <span className="tip-text">Use semantic HTML elements when possible</span>
+                </div>
               </div>
             </div>
           </div>
@@ -79,3 +238,5 @@ export const HtmlFormatter: React.FC = () => {
     </div>
   );
 };
+
+export default HtmlFormatter;

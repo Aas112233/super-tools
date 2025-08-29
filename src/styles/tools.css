@@ -1,0 +1,255 @@
+.tool-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.tool-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.tool-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.tool-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.bionic-converter-layout, .lorem-generator-layout, .letter-counter-layout, .color-prism-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.input-output-section, .input-section, .lorem-output-section, .stats-section, .case-options-section, .lorem-controls-section, .color-input-section, .color-controls-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: white;
+}
+
+.case-converter-input, .case-converter-output, .lorem-output-textarea, .letter-counter-textarea, .bionic-input-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.color-preview-input {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.color-info-section {
+  margin-top: 1.5rem;
+}
+
+.bionic-preview {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  min-height: 120px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.copy-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.copy-btn:hover:not(.disabled) {
+  background: #45a049;
+}
+
+.copy-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.copy-btn.copied {
+  background: #2196F3;
+}
+
+.case-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.case-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: white;
+}
+
+.case-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.case-btn.active {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.2);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+label, h3 {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.color-controls-header h3 {
+  margin-bottom: 0.25rem;
+}
+
+.color-controls-header p {
+  margin-top: 0;
+  font-weight: normal;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.bionic-controls-header h3 {
+  margin-bottom: 0.25rem;
+}
+
+.bionic-controls-header p {
+  margin-top: 0;
+  font-weight: normal;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.control-group {
+  margin-bottom: 1.5rem;
+}
+
+.volume-slider {
+  margin-top: 0.5rem;
+}
+
+.slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.bionic-info h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.bionic-info ul {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.bionic-info li {
+  margin-bottom: 0.5rem;
+}
+
+.text-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tool-container {
+    padding: 1rem;
+  }
+  
+  .bionic-converter-layout, .lorem-generator-layout, .letter-counter-layout, .color-prism-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tool-header h1 {
+    font-size: 2rem;
+  }
+  
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
