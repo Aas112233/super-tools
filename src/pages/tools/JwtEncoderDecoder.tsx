@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Eye, EyeOff } from 'lucide-react';
 
-export const JwtEncoderDecoder: React.FC = () => {
+const JwtEncoderDecoder: React.FC = () => {
   const [input, setInput] = useState('');
   const [header, setHeader] = useState('');
   const [payload, setPayload] = useState('');
@@ -215,3 +215,5 @@ export const JwtEncoderDecoder: React.FC = () => {
     </div>
   );
 };
+
+export default JwtEncoderDecoder;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const FontPairingFinder: React.FC = () => {
+const FontPairingFinder: React.FC = () => {
   const [currentPair, setCurrentPair] = useState({ primary: 'Playfair Display', secondary: 'Source Sans Pro' });
   const [category, setCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -143,3 +143,5 @@ export const FontPairingFinder: React.FC = () => {
     </div>
   );
 };
+
+export default FontPairingFinder;

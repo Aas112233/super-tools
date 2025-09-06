@@ -23,7 +23,7 @@ const urlSlug = (str: string, options: { separator?: string; lowercase?: boolean
   return result;
 };
 
-export const UrlSlugGenerator: React.FC = () => {
+const UrlSlugGenerator: React.FC = () => {
   const [input, setInput] = useState('');
   const [separator, setSeparator] = useState('-');
   const [lowercase, setLowercase] = useState(true);
@@ -174,3 +174,5 @@ export const UrlSlugGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default UrlSlugGenerator;

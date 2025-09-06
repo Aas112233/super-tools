@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Shuffle, Copy, Check } from 'lucide-react';
 
-export const ListRandomizer: React.FC = () => {
+const ListRandomizer: React.FC = () => {
   const [inputList, setInputList] = useState('');
   const [randomizedList, setRandomizedList] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
@@ -219,3 +219,5 @@ export const ListRandomizer: React.FC = () => {
     </div>
   );
 };
+
+export default ListRandomizer;

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export const PhotoFilters: React.FC = () => {
+const PhotoFilters: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState('none');
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -253,3 +253,5 @@ export const PhotoFilters: React.FC = () => {
     </div>
   );
 };
+
+export default PhotoFilters;

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Resizer from 'react-image-file-resizer';
 
-export const ImageResizer: React.FC = () => {
+const ImageResizer: React.FC = () => {
   const [originalImage, setOriginalImage] = useState<string>('');
   const [resizedImage, setResizedImage] = useState<string>('');
   const [width, setWidth] = useState(800);
@@ -261,3 +261,5 @@ export const ImageResizer: React.FC = () => {
     </div>
   );
 };
+
+export default ImageResizer;

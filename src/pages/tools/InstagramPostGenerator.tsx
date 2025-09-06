@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Download, Upload, Type, Palette, Image as ImageIcon } from 'lucide-react';
 
-export const InstagramPostGenerator: React.FC = () => {
+const InstagramPostGenerator: React.FC = () => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const [text, setText] = useState('Your text here');
@@ -136,11 +136,16 @@ export const InstagramPostGenerator: React.FC = () => {
   };
 
   return (
-    <div className="tool-container">
-      <div className="tool-header">
-        <h1>Instagram Post Creator</h1>
-        <p>Create stunning 1080x1080 Instagram posts with custom text and backgrounds</p>
-      </div>
+    <div className="p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-slate-900 dark:text-white">
+            Instagram Post Creator
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-300">
+            Create stunning 1080x1080 Instagram posts with custom text and backgrounds
+          </p>
+        </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', alignItems: 'start' }}>
         <div style={{ background: 'var(--bg-secondary)', padding: '2rem', borderRadius: '16px', border: '2px solid var(--border-color)' }}>
@@ -370,3 +375,5 @@ export const InstagramPostGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default InstagramPostGenerator;

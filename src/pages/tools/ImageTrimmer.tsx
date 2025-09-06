@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 import 'react-advanced-cropper/dist/style.css';
 
-export const ImageTrimmer: React.FC = () => {
+const ImageTrimmer: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [croppedImage, setCroppedImage] = useState<string>('');
   const [selectedTemplate, setSelectedTemplate] = useState('free');
@@ -170,3 +170,5 @@ export const ImageTrimmer: React.FC = () => {
     </div>
   );
 };
+
+export default ImageTrimmer;

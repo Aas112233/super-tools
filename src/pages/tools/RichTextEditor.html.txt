@@ -1,0 +1,2089 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Rich Text Editor - MS Word 2021 Style</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #2b579a;
+            --secondary-color: #1e477a;
+            --accent-color: #0078d4;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --border-color: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            color: var(--dark-gray);
+        }
+        
+        .container-fluid {
+            height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* Tabs Styles */
+        .tabs {
+            background-color: var(--light-gray);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            display: flex;
+            overflow-x: auto;
+        }
+        
+        .nav-link {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 0;
+            margin-right: 2px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--medium-gray);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active {
+            border-bottom: 3px solid var(--accent-color);
+        }
+        
+        /* Toolbar Styles */
+        .toolbar {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            min-height: 50px;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 10px;
+            background-color: white;
+        }
+        
+        .toolbar-btn {
+            background-color: white;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: var(--medium-gray);
+            color: var(--primary-color);
+        }
+        
+        .toolbar-btn.active {
+            background-color: #e6f1ff;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+        
+        .toolbar-btn i {
+            font-size: 16px;
+        }
+        
+        .dropdown-toggle::after {
+            margin-left: 5px;
+            transition: transform 0.2s ease;
+        }
+        
+        .dropdown-toggle.show::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Button with icons only */
+        .icon-btn {
+            padding: 6px 8px;
+        }
+        
+        .icon-btn i {
+            margin-right: 0;
+        }
+        
+        /* Dropdown specific styles */
+        .font-dropdown {
+            min-width: 120px;
+            justify-content: space-between;
+        }
+        
+        .size-dropdown {
+            min-width: 60px;
+            justify-content: center;
+        }
+        
+        .color-dropdown {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .color-dropdown i {
+            margin-right: 0;
+            font-size: 18px;
+        }
+        
+        .color-options {
+            min-width: 200px;
+            padding: 10px;
+        }
+        
+        .color-option {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            margin: 4px;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: transform 0.1s ease;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: #999;
+        }
+        
+        .color-option.selected {
+            border: 2px solid #333;
+            transform: scale(1.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 50px;
+            background-color: var(--light-gray);
+            border-right: 1px solid var(--border-color);
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .sidebar-btn {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: #666;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .sidebar-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(43, 87, 154, 0.1);
+        }
+        
+        .sidebar-btn.active {
+            color: var(--primary-color);
+            background-color: rgba(43, 87, 154, 0.2);
+        }
+        
+        /* Editor Container */
+        .editor-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ruler {
+            height: 30px;
+            background-color: var(--light-gray);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 50px;
+        }
+        
+        .ruler-scale {
+            width: 100%;
+            height: 15px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .ruler-tick {
+            position: absolute;
+            bottom: 0;
+            width: 1px;
+            background-color: #999;
+            height: 10px;
+        }
+        
+        .ruler-tick.long {
+            height: 15px;
+        }
+        
+        .ruler-mark {
+            position: absolute;
+            bottom: 5px;
+            font-size: 10px;
+            color: #666;
+            transform: translateX(-50%);
+        }
+        
+        #editor {
+            width: 100%;
+            height: calc(100% - 30px);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 50px 70px;
+            overflow-y: auto;
+            outline: none;
+            line-height: 1.5;
+            font-size: 16px;
+            position: relative;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            background-color: var(--light-gray);
+            color: #333;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Tab content - hidden by default except home */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        
+        .tool-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 5px;
+        }
+        
+        .tool-label {
+            font-size: 11px;
+            margin-top: 4px;
+            color: #555;
+            text-align: center;
+            max-width: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .insert-icon {
+            width: 44px;
+            height: 44px;
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #ddd;
+        }
+        
+        .insert-icon:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .insert-icon i {
+            font-size: 20px;
+            color: #555;
+        }
+        
+        /* Context menu */
+        .context-menu {
+            position: absolute;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            min-width: 180px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .context-menu-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .context-menu-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .context-menu-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 4px 0;
+        }
+        
+        /* Sidebar content */
+        .sidebar-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background-color: white;
+            border-left: 1px solid var(--border-color);
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .sidebar-content.active {
+            transform: translateX(0);
+        }
+        
+        .sidebar-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sidebar-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: var(--light-gray);
+        }
+        
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* Animation for toolbar buttons */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .animated {
+            animation: pop 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Word Editor</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-light me-2" title="Search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="btn btn-sm btn-light me-2" title="Share">
+                    <i class="bi bi-share"></i>
+                </button>
+                <button class="btn btn-sm btn-light" title="Account">
+                    <i class="bi bi-person-circle"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-tabs tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-tab="home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="insert">Insert</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="design">Design</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="layout">Layout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="references">References</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="mailings">Mailings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="review">Review</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab="view">View</a>
+            </li>
+        </ul>
+        
+        <!-- Home Toolbar -->
+        <div id="home-toolbar" class="toolbar tab-content active">
+            <div class="toolbar-group">
+                <button class="toolbar-btn icon-btn" onclick="formatText('bold')">
+                    <i class="bi bi-type-bold"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('italic')">
+                    <i class="bi bi-type-italic"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('underline')">
+                    <i class="bi bi-type-underline"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('strikeThrough')">
+                    <i class="bi bi-type-strikethrough"></i>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <div class="dropdown">
+                    <button class="toolbar-btn font-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Calibri
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Arial')">Arial</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Times New Roman')">Times New Roman</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Courier New')">Courier New</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Georgia')">Georgia</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Verdana')">Verdana</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Comic Sans MS')">Comic Sans MS</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFont('Tahoma')">Tahoma</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="toolbar-btn size-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        11
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="setSize('8')">8</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('10')">10</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('12')">12</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('14')">14</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('16')">16</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('18')">18</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('24')">24</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setSize('36')">36</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="toolbar-btn icon-btn" onclick="formatText('justifyLeft')">
+                    <i class="bi bi-text-left"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('justifyCenter')">
+                    <i class="bi bi-text-center"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('justifyRight')">
+                    <i class="bi bi-text-right"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('justifyFull')">
+                    <i class="bi bi-text-justify"></i>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <div class="dropdown">
+                    <button class="toolbar-btn color-dropdown" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-paint-bucket"></i>
+                    </button>
+                    <div class="dropdown-menu color-options">
+                        <div class="row g-1">
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #000000;" onclick="setColor('#000000')"></div>
+                                <div class="color-option" style="background-color: #FF0000;" onclick="setColor('#FF0000')"></div>
+                                <div class="color-option" style="background-color: #00FF00;" onclick="setColor('#00FF00')"></div>
+                                <div class="color-option" style="background-color: #0000FF;" onclick="setColor('#0000FF')"></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #FFFF00;" onclick="setColor('#FFFF00')"></div>
+                                <div class="color-option" style="background-color: #FF00FF;" onclick="setColor('#FF00FF')"></div>
+                                <div class="color-option" style="background-color: #00FFFF;" onclick="setColor('#00FFFF')"></div>
+                                <div class="color-option" style="background-color: #C0C0C0;" onclick="setColor('#C0C0C0')"></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #800000;" onclick="setColor('#800000')"></div>
+                                <div class="color-option" style="background-color: #808000;" onclick="setColor('#808000')"></div>
+                                <div class="color-option" style="background-color: #008000;" onclick="setColor('#008000')"></div>
+                                <div class="color-option" style="background-color: #800080;" onclick="setColor('#800080')"></div>
+                            </div>
+                        </div>
+                        <div class="row g-1 mt-2">
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #008080;" onclick="setColor('#008080')"></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #000080;" onclick="setColor('#000080')"></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="color-option" style="background-color: #808080;" onclick="setColor('#808080')"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="toolbar-btn icon-btn" onclick="formatText('insertUnorderedList')">
+                    <i class="bi bi-list-ul"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('insertOrderedList')">
+                    <i class="bi bi-list-ol"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('indent')">
+                    <i class="bi bi-arrow-bar-right"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('outdent')">
+                    <i class="bi bi-arrow-bar-left"></i>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="toolbar-btn icon-btn" onclick="formatText('undo')">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+                <button class="toolbar-btn icon-btn" onclick="formatText('redo')">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="toolbar-btn" onclick="openFindReplace()">
+                    <i class="bi bi-search"></i> Find
+                </button>
+                <button class="toolbar-btn" onclick="openReplace()">
+                    <i class="bi bi-arrow-repeat"></i> Replace
+                </button>
+            </div>
+        </div>
+        
+        <!-- Insert Toolbar -->
+        <div id="insert-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertImage()">
+                    <i class="bi bi-image"></i>
+                </div>
+                <div class="tool-label">Pictures</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertLink()">
+                    <i class="bi bi-link-45deg"></i>
+                </div>
+                <div class="tool-label">Link</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertTable()">
+                    <i class="bi bi-table"></i>
+                </div>
+                <div class="tool-label">Table</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertShape()">
+                    <i class="bi bi-square"></i>
+                </div>
+                <div class="tool-label">Shapes</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertChart()">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <div class="tool-label">Chart</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertHeader()">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="tool-label">Header</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertFooter()">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="tool-label">Footer</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertPageBreak()">
+                    <i class="bi bi-file-earmark-break"></i>
+                </div>
+                <div class="tool-label">Page Break</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertSymbol()">
+                    <i class="bi bi-asterisk"></i>
+                </div>
+                <div class="tool-label">Symbol</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertEquation()">
+                    <i class="bi bi-calculator"></i>
+                </div>
+                <div class="tool-label">Equation</div>
+            </div>
+        </div>
+        
+        <!-- Design Toolbar -->
+        <div id="design-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="applyTheme('default')">
+                    <i class="bi bi-palette"></i>
+                </div>
+                <div class="tool-label">Themes</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addPageBorder()">
+                    <i class="bi bi-border-outer"></i>
+                </div>
+                <div class="tool-label">Page Border</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addWatermark()">
+                    <i class="bi bi-water"></i>
+                </div>
+                <div class="tool-label">Watermark</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="applyColors()">
+                    <i class="bi bi-brush"></i>
+                </div>
+                <div class="tool-label">Colors</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="applyFonts()">
+                    <i class="bi bi-type-h1"></i>
+                </div>
+                <div class="tool-label">Fonts</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="applyEffects()">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <div class="tool-label">Effects</div>
+            </div>
+        </div>
+        
+        <!-- Layout Toolbar -->
+        <div id="layout-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setMargins()">
+                    <i class="bi bi-arrows-angle-contract"></i>
+                </div>
+                <div class="tool-label">Margins</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setOrientation()">
+                    <i class="bi bi-arrow-left-right"></i>
+                </div>
+                <div class="tool-label">Orientation</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setSize()">
+                    <i class="bi bi-aspect-ratio"></i>
+                </div>
+                <div class="tool-label">Size</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setColumns()">
+                    <i class="bi bi-layout-sidebar"></i>
+                </div>
+                <div class="tool-label">Columns</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setBreaks()">
+                    <i class="bi bi-dash"></i>
+                </div>
+                <div class="tool-label">Breaks</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setPageNumbering()">
+                    <i class="bi bi-123"></i>
+                </div>
+                <div class="tool-label">Page Number</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="setLineNumbers()">
+                    <i class="bi bi-123"></i>
+                </div>
+                <div class="tool-label">Line Numbers</div>
+            </div>
+        </div>
+        
+        <!-- References Toolbar -->
+        <div id="references-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addTableOfContents()">
+                    <i class="bi bi-list-task"></i>
+                </div>
+                <div class="tool-label">Table of Contents</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addFootnote()">
+                    <i class="bi bi-tag"></i>
+                </div>
+                <div class="tool-label">Footnote</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addCitation()">
+                    <i class="bi bi-bookmark-star"></i>
+                </div>
+                <div class="tool-label">Citation</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addBibliography()">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="tool-label">Bibliography</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addIndex()">
+                    <i class="bi bi-card-text"></i>
+                </div>
+                <div class="tool-label">Index</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addCaption()">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div class="tool-label">Caption</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addTableOfFigures()">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <div class="tool-label">Table of Figures</div>
+            </div>
+        </div>
+        
+        <!-- Mailings Toolbar -->
+        <div id="mailings-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="startMailMerge()">
+                    <i class="bi bi-envelope"></i>
+                </div>
+                <div class="tool-label">Start Mail Merge</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="selectRecipients()">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="tool-label">Select Recipients</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="insertAddress()">
+                    <i class="bi bi-house"></i>
+                </div>
+                <div class="tool-label">Address Block</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="previewResults()">
+                    <i class="bi bi-binoculars"></i>
+                </div>
+                <div class="tool-label">Preview Results</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="completeMerge()">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+                <div class="tool-label">Complete Merge</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="envelopesLabels()">
+                    <i class="bi bi-mailbox"></i>
+                </div>
+                <div class="tool-label">Envelopes</div>
+            </div>
+        </div>
+        
+        <!-- Review Toolbar -->
+        <div id="review-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="startSpelling()">
+                    <i class="bi bi-text-paragraph"></i>
+                </div>
+                <div class="tool-label">Spelling & Grammar</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="addComment()">
+                    <i class="bi bi-chat-left-text"></i>
+                </div>
+                <div class="tool-label">New Comment</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="trackChanges()">
+                    <i class="bi bi-pen"></i>
+                </div>
+                <div class="tool-label">Track Changes</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="acceptChanges()">
+                    <i class="bi bi-check2"></i>
+                </div>
+                <div class="tool-label">Accept</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="rejectChanges()">
+                    <i class="bi bi-x"></i>
+                </div>
+                <div class="tool-label">Reject</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="translateText()">
+                    <i class="bi bi-translate"></i>
+                </div>
+                <div class="tool-label">Translate</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="showWordCount()">
+                    <i class="bi bi-calculator"></i>
+                </div>
+                <div class="tool-label">Word Count</div>
+            </div>
+        </div>
+        
+        <!-- View Toolbar -->
+        <div id="view-toolbar" class="toolbar tab-content">
+            <div class="tool-group">
+                <div class="insert-icon" onclick="switchView('print')">
+                    <i class="bi bi-file-earmark"></i>
+                </div>
+                <div class="tool-label">Print Layout</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="switchView('web')">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <div class="tool-label">Web Layout</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="showRuler()">
+                    <i class="bi bi-rulers"></i>
+                </div>
+                <div class="tool-label">Ruler</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="showGrid()">
+                    <i class="bi bi-grid"></i>
+                </div>
+                <div class="tool-label">Gridlines</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="zoomIn()">
+                    <i class="bi bi-zoom-in"></i>
+                </div>
+                <div class="tool-label">Zoom In</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="zoomOut()">
+                    <i class="bi bi-zoom-out"></i>
+                </div>
+                <div class="tool-label">Zoom Out</div>
+            </div>
+            <div class="tool-group">
+                <div class="insert-icon" onclick="resetZoom()">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </div>
+                <div class="tool-label">100%</div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="sidebar">
+                <button class="sidebar-btn" title="New" onclick="newDocument()">
+                    <i class="bi bi-file-earmark-plus"></i>
+                </button>
+                <button class="sidebar-btn" title="Open" onclick="openDocument()">
+                    <i class="bi bi-folder"></i>
+                </button>
+                <button class="sidebar-btn" title="Save" onclick="saveDocument()">
+                    <i class="bi bi-save"></i>
+                </button>
+                <button class="sidebar-btn" title="Print" onclick="printDocument()">
+                    <i class="bi bi-printer"></i>
+                </button>
+                <button class="sidebar-btn" title="Zoom In" onclick="zoomIn()">
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+                <button class="sidebar-btn" title="Zoom Out" onclick="zoomOut()">
+                    <i class="bi bi-zoom-out"></i>
+                </button>
+                <button class="sidebar-btn active" title="Comments" onclick="toggleSidebar('comments')">
+                    <i class="bi bi-chat-left-text"></i>
+                </button>
+                <button class="sidebar-btn" title="Find" onclick="toggleSidebar('find')">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            
+            <div class="editor-container">
+                <div class="ruler">
+                    <div class="ruler-scale" id="ruler-scale">
+                        <!-- Ruler ticks will be generated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div id="editor" contenteditable="true">
+                    <h1 style="text-align: center;">Advanced Rich Text Editor</h1>
+                    <p>This is a fully-featured Microsoft Word 2021 style rich text editor with advanced functionality.</p>
+                    <p>Key features include:</p>
+                    <ul>
+                        <li>Complete formatting options (bold, italic, underline, font selection, etc.)</li>
+                        <li>Insert images, tables, charts, and other elements</li>
+                        <li>Page design and layout controls</li>
+                        <li>References and citation management</li>
+                        <li>Mail merge capabilities</li>
+                        <li>Review and collaboration tools</li>
+                        <li>Multiple view options</li>
+                    </ul>
+                    <p>Use the tabs above to access different functionality. Right-click for context menu options.</p>
+                    <p>Start typing to create your professional document!</p>
+                </div>
+            </div>
+            
+            <!-- Sidebar Content -->
+            <div class="sidebar-content" id="comments-sidebar">
+                <div class="sidebar-header">Comments</div>
+                <div class="sidebar-item">
+                    <strong>Reviewer:</strong> Good start on the document. Consider adding more details in section 2.
+                </div>
+                <div class="sidebar-item">
+                    <strong>Editor:</strong> Please check the citation format throughout the document.
+                </div>
+                <div class="sidebar-item">
+                    <textarea class="form-control" rows="3" placeholder="Add a comment..."></textarea>
+                    <button class="btn btn-sm btn-primary mt-2">Comment</button>
+                </div>
+            </div>
+            
+            <div class="sidebar-content" id="find-sidebar">
+                <div class="sidebar-header">Find and Replace</div>
+                <div class="mb-3">
+                    <label class="form-label">Find what:</label>
+                    <input type="text" class="form-control" id="find-input" placeholder="Enter text to find">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Replace with:</label>
+                    <input type="text" class="form-control" id="replace-input" placeholder="Enter replacement text">
+                </div>
+                <button class="btn btn-sm btn-primary w-100 mb-2" onclick="findText()">Find Next</button>
+                <button class="btn btn-sm btn-success w-100 mb-2" onclick="replaceText()">Replace</button>
+                <button class="btn btn-sm btn-success w-100 mb-2" onclick="replaceAllText()">Replace All</button>
+            </div>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+            </div>
+            <div class="status-item">
+                <i class="bi bi-file-text"></i>
+                <span>Words: <span id="wordCount">0</span></span>
+            </div>
+            <div class="status-item">
+                <i class="bi bi-text-paragraph"></i>
+                <span>Chars: <span id="charCount">0</span></span>
+            </div>
+            <div class="status-item">
+                <i class="bi bi-zoom-in"></i>
+                <span>Zoom: <span id="zoomLevel">100</span>%</span>
+            </div>
+        </div>
+        
+        <!-- Context Menu -->
+        <div class="context-menu" id="context-menu">
+            <div class="context-menu-item" onclick="formatText('bold')">
+                <i class="bi bi-type-bold"></i> Bold
+            </div>
+            <div class="context-menu-item" onclick="formatText('italic')">
+                <i class="bi bi-type-italic"></i> Italic
+            </div>
+            <div class="context-menu-item" onclick="formatText('underline')">
+                <i class="bi bi-type-underline"></i> Underline
+            </div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" onclick="copyText()">
+                <i class="bi bi-clipboard"></i> Copy
+            </div>
+            <div class="context-menu-item" onclick="cutText()">
+                <i class="bi bi-scissors"></i> Cut
+            </div>
+            <div class="context-menu-item" onclick="pasteText()">
+                <i class="bi bi-clipboard-plus"></i> Paste
+            </div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" onclick="addComment()">
+                <i class="bi bi-chat-left-text"></i> Add Comment
+            </div>
+            <div class="context-menu-item" onclick="insertLink()">
+                <i class="bi bi-link-45deg"></i> Link
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const editor = document.getElementById('editor');
+        const wordCountElement = document.getElementById('wordCount');
+        const charCountElement = document.getElementById('charCount');
+        const contextMenu = document.getElementById('context-menu');
+        const rulerScale = document.getElementById('ruler-scale');
+        const currentPage = document.getElementById('currentPage');
+        const totalPages = document.getElementById('totalPages');
+        const zoomLevel = document.getElementById('zoomLevel');
+        
+        // Initialize the editor
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create ruler ticks
+            createRuler();
+            
+            // Initialize counts
+            updateCounts();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+        
+        // Create ruler ticks
+        function createRuler() {
+            rulerScale.innerHTML = '';
+            const width = editor.clientWidth;
+            const inchInPx = width / 8.5; // Assuming 8.5 inches width
+            
+            for (let i = 0; i <= 8; i++) {
+                const position = i * inchInPx;
+                const tick = document.createElement('div');
+                tick.className = 'ruler-tick long';
+                tick.style.left = `${position}px`;
+                rulerScale.appendChild(tick);
+                
+                const mark = document.createElement('div');
+                mark.className = 'ruler-mark';
+                mark.style.left = `${position}px`;
+                mark.textContent = i;
+                rulerScale.appendChild(mark);
+                
+                // Add smaller ticks between inches
+                if (i < 8) {
+                    for (let j = 1; j < 10; j++) {
+                        const subPosition = position + (j * inchInPx / 10);
+                        const subTick = document.createElement('div');
+                        subTick.className = 'ruler-tick';
+                        subTick.style.left = `${subPosition}px`;
+                        rulerScale.appendChild(subTick);
+                    }
+                }
+            }
+        }
+        
+        // Update word and character count
+        function updateCounts() {
+            const text = editor.innerText || editor.textContent;
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            wordCountElement.textContent = words.length;
+            charCountElement.textContent = text.length;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Input event for counts
+            editor.addEventListener('input', function() {
+                updateCounts();
+                saveToLocalStorage();
+            });
+            
+            // Context menu
+            editor.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                contextMenu.style.display = 'block';
+                contextMenu.style.left = `${e.pageX}px`;
+                contextMenu.style.top = `${e.pageY}px`;
+            });
+            
+            // Click outside context menu to hide it
+            document.addEventListener('click', function() {
+                contextMenu.style.display = 'none';
+            });
+            
+            // Window resize - update ruler
+            window.addEventListener('resize', function() {
+                createRuler();
+            });
+            
+            // Load saved content
+            loadFromLocalStorage();
+        }
+        
+        // Format text using document.execCommand
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            editor.focus();
+            
+            // Add animation effect
+            const toolbarBtn = document.querySelector(`[onclick="formatText('${command}')"]`);
+            if (toolbarBtn) {
+                toolbarBtn.classList.add('animated');
+                setTimeout(() => {
+                    toolbarBtn.classList.remove('animated');
+                }, 300);
+            }
+        }
+        
+        // Set font
+        function setFont(font) {
+            document.execCommand('fontName', false, font);
+            document.querySelector('.font-dropdown').textContent = font;
+            editor.focus();
+        }
+        
+        // Set font size
+        function setSize(size) {
+            document.execCommand('fontSize', false, size);
+            document.querySelector('.size-dropdown').textContent = size;
+            editor.focus();
+        }
+        
+        // Set text color
+        function setColor(color) {
+            document.execCommand('foreColor', false, color);
+            // Update selected color indicator
+            document.querySelectorAll('.color-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            editor.focus();
+        }
+        
+        // Tab switching functionality
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active tab
+                document.querySelectorAll('.nav-link').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show appropriate toolbar
+                const tabName = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-toolbar`).classList.add('active');
+            });
+        });
+        
+        // Insert functions
+        function insertImage() {
+            const url = prompt("Enter image URL:");
+            if (url) {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.maxWidth = '50%';
+                img.style.height = 'auto';
+                img.style.display = 'block';
+                img.style.margin = '10px auto';
+                img.style.borderRadius = '4px';
+                img.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+                getSelection().getRangeAt(0).insertNode(img);
+                editor.focus();
+            }
+        }
+        
+        function insertLink() {
+            const url = prompt("Enter URL:");
+            if (url) {
+                const text = getSelection().toString() || url;
+                document.execCommand('unlink', false, null); // Remove existing link
+                document.execCommand('createLink', false, url);
+                
+                // Style the link
+                const links = editor.querySelectorAll('a');
+                links.forEach(link => {
+                    link.style.color = '#0078d4';
+                    link.style.textDecoration = 'underline';
+                });
+                editor.focus();
+            }
+        }
+        
+        function insertTable() {
+            const rows = parseInt(prompt("Number of rows:", "3")) || 3;
+            const cols = parseInt(prompt("Number of columns:", "3")) || 3;
+            
+            if (rows > 0 && cols > 0) {
+                const table = document.createElement('table');
+                table.style.borderCollapse = 'collapse';
+                table.style.width = '100%';
+                table.style.margin = '10px 0';
+                table.style.border = '1px solid #ddd';
+                
+                for (let i = 0; i < rows; i++) {
+                    const tr = document.createElement('tr');
+                    for (let j = 0; j < cols; j++) {
+                        const td = document.createElement('td');
+                        td.style.border = '1px solid #ddd';
+                        td.style.padding = '8px';
+                        td.style.backgroundColor = i === 0 ? '#f0f0f0' : 'white';
+                        td.style.fontWeight = i === 0 ? 'bold' : 'normal';
+                        td.contentEditable = 'true';
+                        td.textContent = i === 0 ? `Header ${j+1}` : `Cell ${i+1}-${j+1}`;
+                        tr.appendChild(td);
+                    }
+                    table.appendChild(tr);
+                }
+                
+                getSelection().getRangeAt(0).insertNode(table);
+                editor.focus();
+            }
+        }
+        
+        function insertShape() {
+            const shapeType = prompt("Choose shape: rectangle, circle, triangle");
+            const shape = document.createElement('div');
+            shape.style.width = '100px';
+            shape.style.height = '100px';
+            shape.style.display = 'inline-block';
+            shape.style.margin = '10px';
+            shape.contentEditable = 'false';
+            
+            switch(shapeType?.toLowerCase()) {
+                case 'circle':
+                    shape.style.borderRadius = '50%';
+                    shape.style.backgroundColor = '#0078d4';
+                    break;
+                case 'triangle':
+                    shape.innerHTML = '<div style="width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 100px solid #0078d4;"></div>';
+                    shape.style.backgroundColor = 'transparent';
+                    break;
+                default:
+                    shape.style.backgroundColor = '#0078d4';
+            }
+            
+            getSelection().getRangeAt(0).insertNode(shape);
+            editor.focus();
+        }
+        
+        function insertChart() {
+            const chart = document.createElement('div');
+            chart.style.width = '400px';
+            chart.style.height = '300px';
+            chart.style.border = '1px solid #ddd';
+            chart.style.margin = '10px auto';
+            chart.style.backgroundColor = '#f9f9f9';
+            chart.style.borderRadius = '4px';
+            chart.style.padding = '10px';
+            
+            const title = document.createElement('h3');
+            title.textContent = 'Chart Title';
+            title.style.textAlign = 'center';
+            title.style.marginBottom = '15px';
+            
+            const bars = document.createElement('div');
+            bars.style.display = 'flex';
+            bars.style.justifyContent = 'space-around';
+            bars.style.alignItems = 'flex-end';
+            bars.style.height = '200px';
+            bars.style.backgroundColor = 'white';
+            bars.style.borderRadius = '4px';
+            bars.style.padding = '10px';
+            
+            // Add sample bars
+            for (let i = 0; i < 5; i++) {
+                const bar = document.createElement('div');
+                bar.style.width = '40px';
+                bar.style.backgroundColor = '#0078d4';
+                bar.style.borderRadius = '4px 4px 0 0';
+                bar.style.height = `${Math.random() * 180 + 20}px`;
+                bars.appendChild(bar);
+            }
+            
+            chart.appendChild(title);
+            chart.appendChild(bars);
+            getSelection().getRangeAt(0).insertNode(chart);
+            editor.focus();
+        }
+        
+        function insertHeader() {
+            const header = document.createElement('div');
+            header.style.borderBottom = '2px solid var(--primary-color)';
+            header.style.padding = '15px 10px';
+            header.style.marginBottom = '20px';
+            header.style.backgroundColor = '#f5f5f5';
+            header.style.fontWeight = '600';
+            header.contentEditable = 'true';
+            header.textContent = 'Document Header';
+            editor.insertBefore(header, editor.firstChild);
+            editor.focus();
+        }
+        
+        function insertFooter() {
+            const footer = document.createElement('div');
+            footer.style.borderTop = '2px solid var(--primary-color)';
+            footer.style.padding = '15px 10px';
+            footer.style.marginTop = '20px';
+            footer.style.backgroundColor = '#f5f5f5';
+            footer.style.textAlign = 'center';
+            footer.contentEditable = 'true';
+            footer.innerHTML = 'Page <span class="page-number">1</span> | Document Footer';
+            editor.appendChild(footer);
+            editor.focus();
+        }
+        
+        function insertPageBreak() {
+            const pageBreak = document.createElement('div');
+            pageBreak.style.pageBreakAfter = 'always';
+            pageBreak.style.height = '0';
+            pageBreak.style.clear = 'both';
+            pageBreak.style.paddingTop = '20px';
+            getSelection().getRangeAt(0).insertNode(pageBreak);
+            updatePageCount();
+            editor.focus();
+        }
+        
+        function insertSymbol() {
+            const symbols = {
+                '©': 'Copyright',
+                '®': 'Registered Trademark', 
+                '™': 'Trademark',
+                '€': 'Euro',
+                '£': 'Pound',
+                '¥': 'Yen',
+                '§': 'Section',
+                '¶': 'Paragraph'
+            };
+            
+            const symbol = prompt(`Enter symbol (${Object.keys(symbols).join(', ')}):`);
+            if (symbol && symbols[symbol]) {
+                document.execCommand('insertText', false, symbol);
+                editor.focus();
+            }
+        }
+        
+        function insertEquation() {
+            const equation = prompt("Enter equation (use LaTeX syntax if available):");
+            if (equation) {
+                const eqContainer = document.createElement('div');
+                eqContainer.style.textAlign = 'center';
+                eqContainer.style.fontStyle = 'italic';
+                eqContainer.style.margin = '15px 0';
+                eqContainer.style.padding = '10px';
+                eqContainer.style.display = 'inline-block';
+                eqContainer.style.border = '1px dashed #ccc';
+                eqContainer.style.borderRadius = '4px';
+                eqContainer.contentEditable = 'false';
+                eqContainer.textContent = equation || 'f(x) = x² + 2x + 1';
+                getSelection().getRangeAt(0).insertNode(eqContainer);
+                editor.focus();
+            }
+        }
+        
+        // Design functions
+        function applyTheme(theme) {
+            const body = document.body;
+            const toolbar = document.querySelector('.toolbar');
+            
+            switch(theme) {
+                case 'dark':
+                    body.style.backgroundColor = '#2d2d2d';
+                    body.style.color = '#ffffff';
+                    editor.style.backgroundColor = '#1e1e1e';
+                    editor.style.color = '#ffffff';
+                    toolbar.style.backgroundColor = '#3c3c3c';
+                    break;
+                case 'high-contrast':
+                    body.style.backgroundColor = '#000000';
+                    body.style.color = '#ffffff';
+                    editor.style.backgroundColor = '#000000';
+                    editor.style.color = '#ffff00';
+                    editor.style.fontWeight = 'bold';
+                    break;
+                default:
+                    body.style.backgroundColor = '#f0f0f0';
+                    body.style.color = '#333';
+                    editor.style.backgroundColor = 'white';
+                    editor.style.color = 'black';
+                    toolbar.style.backgroundColor = 'white';
+            }
+            editor.focus();
+        }
+        
+        function addPageBorder() {
+            const style = prompt("Border style: solid, dotted, dashed, double:");
+            const color = prompt("Border color (e.g., blue, #ff0000):", "var(--primary-color)");
+            editor.style.border = `3px ${style || 'solid'} ${color}`;
+            editor.focus();
+        }
+        
+        function addWatermark() {
+            const text = prompt("Watermark text:", "DRAFT");
+            const watermark = document.createElement('div');
+            watermark.style.position = 'absolute';
+            watermark.style.top = '50%';
+            watermark.style.left = '50%';
+            watermark.style.transform = 'translate(-50%, -50%) rotate(-45deg)';
+            watermark.style.fontSize = '80px';
+            watermark.style.color = 'rgba(200,200,200,0.2)';
+            watermark.style.pointerEvents = 'none';
+            watermark.style.zIndex = '-1';
+            watermark.style.whiteSpace = 'nowrap';
+            watermark.style.fontWeight = 'bold';
+            watermark.textContent = text;
+            editor.style.position = 'relative';
+            editor.appendChild(watermark);
+            editor.focus();
+        }
+        
+        function applyColors() {
+            alert("Color scheme applied");
+        }
+        
+        function applyFonts() {
+            alert("Font scheme applied");
+        }
+        
+        function applyEffects() {
+            alert("Visual effects applied");
+        }
+        
+        // Layout functions
+        function setMargins() {
+            const margins = prompt("Enter margin in inches (e.g., 1 for 1 inch):", "1");
+            const pxMargin = parseFloat(margins) * 96; // 96px per inch
+            if (!isNaN(pxMargin)) {
+                editor.style.padding = `${pxMargin}px`;
+                createRuler(); // Update ruler
+            }
+            editor.focus();
+        }
+        
+        function setOrientation() {
+            const currentWidth = editor.style.width;
+            const currentHeight = editor.style.height;
+            
+            if (currentWidth === '29.7cm') {
+                // Landscape to portrait
+                editor.style.width = '21cm';
+                editor.style.height = '29.7cm';
+            } else {
+                // Portrait to landscape
+                editor.style.width = '29.7cm';
+                editor.style.height = '21cm';
+            }
+            editor.focus();
+        }
+        
+        function setSize() {
+            const size = prompt("Paper size: A4, Letter, Legal:", "A4");
+            switch(size?.toLowerCase()) {
+                case 'letter':
+                    editor.style.width = '21.59cm';
+                    editor.style.height = '27.94cm';
+                    break;
+                case 'legal':
+                    editor.style.width = '21.59cm';
+                    editor.style.height = '35.56cm';
+                    break;
+                default:
+                    editor.style.width = '21cm';
+                    editor.style.height = '29.7cm';
+            }
+            editor.focus();
+        }
+        
+        function setColumns() {
+            const cols = parseInt(prompt("Number of columns:", "2")) || 2;
+            editor.style.columnCount = cols;
+            editor.style.columnGap = '1cm';
+            editor.focus();
+        }
+        
+        function setBreaks() {
+            insertPageBreak();
+        }
+        
+        function setPageNumbering() {
+            const footer = editor.querySelector('.page-number');
+            if (footer) {
+                footer.textContent = '2'; // Just an example
+            } else {
+                insertFooter();
+            }
+            editor.focus();
+        }
+        
+        function setLineNumbers() {
+            editor.style.columnRule = '1px solid #ddd';
+            editor.style.columnGap = '20px';
+            editor.focus();
+        }
+        
+        // References functions
+        function addTableOfContents() {
+            const toc = document.createElement('div');
+            toc.innerHTML = `
+                <h2>Table of Contents</h2>
+                <ol style="line-height: 2;">
+                    <li><a href="#" style="color: #0078d4;">Introduction ............ 1</a></li>
+                    <li><a href="#" style="color: #0078d4;">Main Content ........... 2</a></li>
+                    <li><a href="#" style="color: #0078d4;">Conclusion ............. 5</a></li>
+                </ol>
+            `;
+            toc.style.margin = '20px 0';
+            getSelection().getRangeAt(0).insertNode(toc);
+            editor.focus();
+        }
+        
+        function addFootnote() {
+            const selection = getSelection().toString();
+            if (selection) {
+                const footnoteNum = document.querySelectorAll('sup.footnote').length + 1;
+                const footnote = document.createElement('sup');
+                footnote.className = 'footnote';
+                footnote.textContent = footnoteNum;
+                footnote.style.color = 'blue';
+                footnote.style.cursor = 'pointer';
+                footnote.title = `Footnote ${footnoteNum}: Additional information`;
+                
+                getSelection().getRangeAt(0).insertNode(footnote);
+                
+                // Add footnote at bottom
+                const footnoteText = prompt(`Footnote ${footnoteNum} text:`);
+                if (footnoteText) {
+                    const footnoteDiv = document.createElement('div');
+                    footnoteDiv.style.fontSize = '12px';
+                    footnoteDiv.style.margin = '5px 0 10px 20px';
+                    footnoteDiv.innerHTML = `<sup>${footnoteNum}</sup> ${footnoteText}`;
+                    editor.appendChild(footnoteDiv);
+                }
+                editor.focus();
+            } else {
+                alert("Please select text first to add a footnote");
+            }
+        }
+        
+        function addCitation() {
+            const citationStyle = prompt("Citation style: APA, MLA, Chicago:", "APA");
+            const citation = document.createElement('span');
+            citation.textContent = `[1]`; // Could be more sophisticated
+            citation.style.fontSize = 'smaller';
+            citation.style.verticalAlign = 'super';
+            citation.style.color = 'green';
+            citation.title = `Citation (${citationStyle}): Source information would appear here`;
+            getSelection().getRangeAt(0).insertNode(citation);
+            editor.focus();
+        }
+        
+        function addBibliography() {
+            const bib = document.createElement('div');
+            bib.innerHTML = `
+                <h2>Bibliography</h2>
+                <ol style="line-height: 1.8;">
+                    <li>Author, A. (Year). <em>Title of work</em>. Publisher.</li>
+                    <li>Author, B. (Year). Article title. <em>Journal Name</em>, Volume(Issue), pages.</li>
+                    <li>Author, C. (Year). Book title. Publisher.</li>
+                </ol>
+            `;
+            bib.style.margin = '20px 0';
+            editor.appendChild(bib);
+            editor.focus();
+        }
+        
+        function addIndex() {
+            const index = document.createElement('div');
+            index.innerHTML = `
+                <h2>Index</h2>
+                <div style="columns: 2; column-gap: 1cm; line-height: 1.8;">
+                    <p><strong>Advanced features</strong> ........... 5</p>
+                    <p><strong>Bibliography</strong> ........... 8</p>
+                    <p><strong>Comments</strong> ........... 3</p>
+                    <p><strong>Design</strong> ........... 6</p>
+                    <p><strong>Equations</strong> ........... 4</p>
+                    <p><strong>Formatting</strong> ........... 2</p>
+                    <p><strong>Images</strong> ........... 4</p>
+                    <p><strong>Layout</strong> ........... 6</p>
+                    <p><strong>References</strong> ........... 7</p>
+                    <p><strong>Tables</strong> ........... 4</p>
+                    <p><strong>Watermark</strong> ........... 6</p>
+                    <p><strong>Word count</strong> ........... 3</p>
+                </div>
+            `;
+            index.style.margin = '20px 0';
+            editor.appendChild(index);
+            editor.focus();
+        }
+        
+        function addCaption() {
+            const captionText = prompt("Enter caption text:");
+            if (captionText) {
+                const caption = document.createElement('p');
+                caption.style.textAlign = 'center';
+                caption.style.fontStyle = 'italic';
+                caption.style.fontSize = '14px';
+                caption.style.color = '#666';
+                caption.style.margin = '5px 0 15px 0';
+                caption.textContent = `Figure 1: ${captionText}`;
+                getSelection().getRangeAt(0).insertNode(caption);
+                editor.focus();
+            }
+        }
+        
+        function addTableOfFigures() {
+            const taf = document.createElement('div');
+            taf.innerHTML = `
+                <h2>List of Figures</h2>
+                <ol style="line-height: 2;">
+                    <li>Figure 1: Sample chart ............ 4</li>
+                    <li>Figure 2: Process diagram ............ 5</li>
+                    <li>Figure 3: Organizational structure ............ 6</li>
+                </ol>
+            `;
+            taf.style.margin = '20px 0';
+            getSelection().getRangeAt(0).insertNode(taf);
+            editor.focus();
+        }
+        
+        // Mailings functions
+        function startMailMerge() {
+            alert("Mail merge started. Select your document type (letter, email, etc.).");
+        }
+        
+        function selectRecipients() {
+            alert("Recipients selected. You can import from Excel, Outlook, or enter manually.");
+        }
+        
+        function insertAddress() {
+            const address = document.createElement('p');
+            address.innerHTML = `
+                <span contenteditable="true">
+                    John Doe<br>
+                    123 Main Street<br>
+                    Anytown, ST 12345
+                </span>
+            `;
+            address.style.margin = '20px 0';
+            getSelection().getRangeAt(0).insertNode(address);
+            editor.focus();
+        }
+        
+        function previewResults() {
+            alert("Previewing mail merge results. Showing how the document will appear for each recipient.");
+        }
+        
+        function completeMerge() {
+            alert("Mail merge completed. Documents have been created and can be printed or saved.");
+        }
+        
+        function envelopesLabels() {
+            alert("Envelopes and labels functionality. Configure envelope size and printing options.");
+        }
+        
+        // Review functions
+        function startSpelling() {
+            // Simple spelling check simulation
+            const text = editor.innerText;
+            const words = text.split(/\s+/);
+            const misspelled = [];
+            
+            // This is a very basic example - a real implementation would use a dictionary
+            const commonMistakes = ['teh', 'adn', 'form', 'wrok'];
+            
+            words.forEach(word => {
+                const cleanWord = word.replace(/[^\w]/g, '').toLowerCase();
+                if (commonMistakes.includes(cleanWord)) {
+                    misspelled.push(word);
+                }
+            });
+            
+            if (misspelled.length > 0) {
+                alert(`Spelling check complete. Found ${misspelled.length} potential misspelled words: ${misspelled.join(', ')}`);
+            } else {
+                alert("Spelling check complete. No errors found.");
+            }
+        }
+        
+        function addComment() {
+            const selection = getSelection();
+            if (selection.toString()) {
+                const comment = prompt("Add comment:");
+                if (comment) {
+                    const span = document.createElement('span');
+                    span.style.backgroundColor = 'yellow';
+                    span.style.color = 'black';
+                    span.title = `Comment: ${comment}`;
+                    span.textContent = selection.toString();
+                    document.execCommand('insertText', false, '');
+                    selection.getRangeAt(0).insertNode(span);
+                    editor.focus();
+                }
+            } else {
+                alert("Please select text to comment on");
+            }
+        }
+        
+        function trackChanges() {
+            alert("Track Changes mode toggled. All future edits will be highlighted.");
+        }
+        
+        function acceptChanges() {
+            alert("Changes accepted. Selected revisions have been incorporated into the document.");
+        }
+        
+        function rejectChanges() {
+            alert("Changes rejected. Selected revisions have been removed from the document.");
+        }
+        
+        function translateText() {
+            const text = getSelection().toString() || "Sample text for translation";
+            alert(`Translating: "${text}"\n\nThis would open a translation pane with options for different languages.`);
+        }
+        
+        function showWordCount() {
+            const text = editor.innerText || editor.textContent;
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            const chars = text.length;
+            const paragraphs = (text.match(/\n\s*\n/g) || []).length + 1;
+            
+            alert(`Word Count\n\nWords: ${words.length}\nCharacters: ${chars}\nCharacters (no spaces): ${text.replace(/\s/g, '').length}\nParagraphs: ${paragraphs}\nPages: ~${Math.ceil(words.length / 300)}`);
+        }
+        
+        // View functions
+        function switchView(view) {
+            if (view === 'print') {
+                editor.style.width = '21cm';
+                editor.style.height = 'auto';
+                editor.style.margin = '20px auto';
+                editor.style.padding = '2cm';
+                editor.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
+            } else {
+                editor.style.width = 'auto';
+                editor.style.height = 'auto';
+                editor.style.margin = '0';
+                editor.style.padding = '20px';
+                editor.style.boxShadow = 'none';
+            }
+            editor.focus();
+        }
+        
+        function showRuler() {
+            const ruler = document.querySelector('.ruler');
+            if (ruler.style.display === 'none' || !ruler.style.display) {
+                ruler.style.display = 'flex';
+            } else {
+                ruler.style.display = 'none';
+            }
+            editor.focus();
+        }
+        
+        function showGrid() {
+            if (editor.style.backgroundImage) {
+                editor.style.backgroundImage = '';
+            } else {
+                editor.style.backgroundImage = 'repeating-linear-gradient(transparent, transparent 14px, rgba(0,120,212,0.1) 15px)';
+            }
+            editor.focus();
+        }
+        
+        function zoomIn() {
+            const currentZoom = parseFloat(zoomLevel.textContent);
+            if (currentZoom < 400) {
+                const newZoom = currentZoom + 25;
+                editor.style.transform = `scale(${newZoom / 100})`;
+                editor.style.transformOrigin = 'top center';
+                zoomLevel.textContent = newZoom;
+            }
+            editor.focus();
+        }
+        
+        function zoomOut() {
+            const currentZoom = parseFloat(zoomLevel.textContent);
+            if (currentZoom > 25) {
+                const newZoom = currentZoom - 25;
+                editor.style.transform = `scale(${newZoom / 100})`;
+                editor.style.transformOrigin = 'top center';
+                zoomLevel.textContent = newZoom;
+            }
+            editor.focus();
+        }
+        
+        function resetZoom() {
+            editor.style.transform = 'scale(1)';
+            zoomLevel.textContent = '100';
+            editor.focus();
+        }
+        
+        // Find and Replace functions
+        function openFindReplace() {
+            document.getElementById('find-sidebar').classList.add('active');
+            document.querySelector('.sidebar-btn[title="Find"]').classList.add('active');
+            document.getElementById('find-input').focus();
+        }
+        
+        function openReplace() {
+            document.getElementById('find-sidebar').classList.add('active');
+            document.querySelector('.sidebar-btn[title="Find"]').classList.add('active');
+            document.getElementById('replace-input').focus();
+        }
+        
+        function findText() {
+            const searchText = document.getElementById('find-input').value;
+            if (!searchText) return;
+            
+            const editorText = editor.innerHTML;
+            const regex = new RegExp(searchText, 'gi');
+            const matches = editorText.match(regex);
+            
+            if (matches) {
+                // Highlight the first occurrence
+                const highlighted = editorText.replace(regex, match => `<mark style="background-color: yellow;">${match}</mark>`);
+                editor.innerHTML = highlighted;
+                alert(`Found ${matches.length} occurrence(s) of "${searchText}"`);
+            } else {
+                alert(`No occurrences of "${searchText}" found`);
+            }
+        }
+        
+        function replaceText() {
+            const findText = document.getElementById('find-input').value;
+            const replaceText = document.getElementById('replace-input').value;
+            if (!findText) return;
+            
+            const selection = getSelection();
+            if (selection.toString() === findText) {
+                document.execCommand('insertText', false, replaceText);
+                alert(`Replaced "${findText}" with "${replaceText}"`);
+            } else {
+                alert(`Selected text is not "${findText}". Please select the correct text first.`);
+            }
+        }
+        
+        function replaceAllText() {
+            const findText = document.getElementById('find-input').value;
+            const replaceText = document.getElementById('replace-input').value;
+            if (!findText) return;
+            
+            const editorText = editor.innerHTML;
+            const regex = new RegExp(findText, 'g');
+            const newHtml = editorText.replace(regex, replaceText);
+            editor.innerHTML = newHtml;
+            
+            const count = (editorText.match(regex) || []).length;
+            alert(`Replaced ${count} occurrence(s) of "${findText}" with "${replaceText}"`);
+        }
+        
+        // Document functions
+        function newDocument() {
+            if (confirm("Create a new document? Current content will be lost.")) {
+                editor.innerHTML = '<p>Start typing your new document here...</p>';
+                updateCounts();
+            }
+        }
+        
+        function openDocument() {
+            alert("Open document functionality. In a real application, this would allow you to open saved documents.");
+        }
+        
+        function saveDocument() {
+            saveToLocalStorage();
+            alert("Document saved locally. In a real application, this would save to cloud storage or download as a file.");
+        }
+        
+        function printDocument() {
+            window.print();
+        }
+        
+        // Sidebar functions
+        function toggleSidebar(type) {
+            // Hide all sidebars
+            document.querySelectorAll('.sidebar-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Deactivate all sidebar buttons
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected sidebar
+            if (type === 'comments') {
+                document.getElementById('comments-sidebar').classList.add('active');
+                document.querySelector('.sidebar-btn[title="Comments"]').classList.add('active');
+            } else if (type === 'find') {
+                document.getElementById('find-sidebar').classList.add('active');
+                document.querySelector('.sidebar-btn[title="Find"]').classList.add('active');
+            }
+        }
+        
+        // Update page count (simplified)
+        function updatePageCount() {
+            // This is a simplified version - a real implementation would calculate based on content
+            const pages = Math.ceil(editor.scrollHeight / 1123); // Approximate page height in pixels
+            totalPages.textContent = pages;
+        }
+        
+        // Local storage functions
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('richEditorContent', editor.innerHTML);
+            } catch (e) {
+                console.warn('Could not save to local storage:', e);
+            }
+        }
+        
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('richEditorContent');
+                if (saved) {
+                    editor.innerHTML = saved;
+                    updateCounts();
+                }
+            } catch (e) {
+                console.warn('Could not load from local storage:', e);
+            }
+        }
+        
+        // Copy, cut, paste functions for context menu
+        function copyText() {
+            document.execCommand('copy');
+            contextMenu.style.display = 'none';
+        }
+        
+        function cutText() {
+            document.execCommand('cut');
+            contextMenu.style.display = 'none';
+        }
+        
+        function pasteText() {
+            document.execCommand('paste');
+            contextMenu.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+```

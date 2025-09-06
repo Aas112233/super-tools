@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import ToolErrorFallback from './ToolErrorFallback';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -8,6 +8,7 @@ interface ErrorBoundaryState {
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
+  toolName?: string;
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -39,8 +40,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
   render() {
     if (this.state.hasError) {
-      // Redirect to dashboard when there's an error
-      return <Navigate to="/tools/dashboard" replace />;
+      return (
+        <ToolErrorFallback
+          error={this.state.error}
+          resetError={() => this.setState({ hasError: false, error: undefined })}
+          toolName={this.props.toolName || 'Tool'}
+        />
+      );
     }
 
     return this.props.children;

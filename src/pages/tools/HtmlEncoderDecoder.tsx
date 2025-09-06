@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Copy, Check, ArrowUpDown, Code } from 'lucide-react';
 
-export const HtmlEncoderDecoder: React.FC = () => {
+const HtmlEncoderDecoder: React.FC = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
@@ -263,3 +263,5 @@ export const HtmlEncoderDecoder: React.FC = () => {
     </div>
   );
 };
+
+export default HtmlEncoderDecoder;

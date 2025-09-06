@@ -4,10 +4,46 @@ import { useTheme } from '../contexts/ThemeContext';
 
 interface ToolPageProps {
   title: string;
+  description?: string;
+  children?: React.ReactNode;
+  showMaintenanceMessage?: boolean;
 }
 
-export const ToolPage: React.FC<ToolPageProps> = ({ title }) => {
+export const ToolPage: React.FC<ToolPageProps> = ({ 
+  title, 
+  description,
+  children, 
+  showMaintenanceMessage = false 
+}) => {
   const { isDark } = useTheme();
+  
+  // If children are provided, render the actual tool content
+  if (children && !showMaintenanceMessage) {
+    return (
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {title}
+            </h1>
+            {description && (
+              <p className={`text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {description}
+              </p>
+            )}
+          </div>
+          
+          {/* Tool Content */}
+          <div>
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Default maintenance message
   return (
     <div className="p-8">
       <div className="max-w-4xl mx-auto">
@@ -21,7 +57,7 @@ export const ToolPage: React.FC<ToolPageProps> = ({ title }) => {
               </div>
               <h1 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h1>
               <p className={`${isDark ? 'text-slate-300' : 'text-slate-600'} text-lg`}>
-                This tool is currently under maintenance. We're working hard to bring you the best experience possible.
+                {description || 'This tool is currently under maintenance. We\'re working hard to bring you the best experience possible.'}
               </p>
             </div>
             

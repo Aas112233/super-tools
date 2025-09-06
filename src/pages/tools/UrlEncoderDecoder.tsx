@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Copy, Check, ArrowUpDown, Globe, Link as LinkIcon } from 'lucide-react';
 
-export const UrlEncoderDecoder: React.FC = () => {
+const UrlEncoderDecoder: React.FC = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
@@ -261,3 +261,5 @@ export const UrlEncoderDecoder: React.FC = () => {
     </div>
   );
 };
+
+export default UrlEncoderDecoder;

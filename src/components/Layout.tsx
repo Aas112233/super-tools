@@ -1,64 +1,23 @@
-import React, { useState, Fragment, useEffect, useRef, useMemo } from 'react';
+import React, { useState, Fragment, useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
+
+import { TOOLS_REGISTRY, CATEGORIES_CONFIG as CENTRALIZED_CATEGORIES, getToolById as centralGetToolById } from '../config/toolsConfig';
 import { 
-  ChevronDown, 
-  ChevronRight,
-  Star, 
-  Type, 
-  Image, 
-  Palette, 
-  Code, 
-  Share2, 
-  MoreHorizontal,
-  Zap,
-  Sun,
-  Moon,
-  FileText,
-  Hash,
-  PenTool,
-  Eye,
-  Scissors,
-  Crop,
-  Filter,
-  Maximize,
-  Droplets,
-  Loader,
-  CheckSquare,
-  ToggleLeft,
-  Grid,
-  Camera,
-  Link as LinkIcon,
-  Smartphone,
-  Binary,
-  Globe,
-  Lock,
-  List,
-  QrCode,
-  Barcode,
-  CreditCard,
-  Layers,
-  BarChart2,
-  Menu,
-  Search,
-  X,
-  Clock,
-  Heart,
-  BookmarkPlus,
-  BookmarkMinus,
-  Bookmark,
-  ChevronUp,
-  Info,
-  Keyboard,
-  TrendingUp,
-  History
+  ChevronRight, Star, Type, Image, Palette, Code, MoreHorizontal, Zap, Sun, Moon, FileText, Hash, PenTool, Eye, Scissors, Crop, Filter, Maximize, Droplets, Loader, CheckSquare, ToggleLeft, Grid, Camera, Link as LinkIcon, Smartphone, Binary, Globe, Lock, List, QrCode, Barcode, CreditCard, Layers, BarChart2, Menu, Search, X, Clock, Bookmark, BookmarkPlus, Info, Keyboard, TrendingUp, RotateCw, Archive, Shield
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
+import { MobileTouchHandler } from './MobileTouchHandler';
+import '../styles/mobile-responsive.css';
+import '../styles/animated-text.css';
+import SEOHead from './SEOHead';
 
 interface Tool {
   id: string;
   name: string;
   href: string;
+  category: string;
 }
 
 interface Category {
@@ -67,231 +26,6 @@ interface Category {
   icon: React.ReactNode;
   tools: string[];
 }
-
-// Central tool registry
-const TOOLS_REGISTRY: Record<string, Tool> = {
-  'case-converter': { id: 'case-converter', name: 'Case Converter', href: '/tools/case-converter' },
-  'lorem-ipsum-generator': { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum Generator', href: '/tools/lorem-ipsum-generator' },
-  'letter-counter': { id: 'letter-counter', name: 'Letter Counter', href: '/tools/letter-counter' },
-  'text-to-handwriting-converter': { id: 'text-to-handwriting-converter', name: 'Text to Handwriting Converter', href: '/tools/text-to-handwriting-converter' },
-  'bionic-reading-converter': { id: 'bionic-reading-converter', name: 'Bionic Reading Converter', href: '/tools/bionic-reading-converter' },
-  'multiple-whitespace-remover': { id: 'multiple-whitespace-remover', name: 'Multiple Whitespace Remover', href: '/tools/multiple-whitespace-remover' },
-  'google-fonts-pair-finder': { id: 'google-fonts-pair-finder', name: 'Google Fonts Pair Finder', href: '/tools/google-fonts-pair-finder' },
-  'image-cropper': { id: 'image-cropper', name: 'Image Cropper', href: '/tools/image-cropper' },
-  'image-filters': { id: 'image-filters', name: 'Image Filters', href: '/tools/image-filters' },
-  'image-resizer': { id: 'image-resizer', name: 'Image Resizer', href: '/tools/image-resizer' },
-  'image-average-color-finder': { id: 'image-average-color-finder', name: 'Image Average Color Finder', href: '/tools/image-average-color-finder' },
-  'image-color-extractor': { id: 'image-color-extractor', name: 'Image Color Extractor', href: '/tools/image-color-extractor' },
-  'image-color-picker': { id: 'image-color-picker', name: 'Image Color Picker', href: '/tools/image-color-picker' },
-  'css-loader-generator': { id: 'css-loader-generator', name: 'CSS Loader Generator', href: '/tools/css-loader-generator' },
-  'css-checkbox-generator': { id: 'css-checkbox-generator', name: 'CSS Checkbox Generator', href: '/tools/css-checkbox-generator' },
-  'css-switch-generator': { id: 'css-switch-generator', name: 'CSS Switch Generator', href: '/tools/css-switch-generator' },
-  'css-clip-path-generator': { id: 'css-clip-path-generator', name: 'CSS Clip Path Generator', href: '/tools/css-clip-path-generator' },
-  'css-background-pattern-generator': { id: 'css-background-pattern-generator', name: 'CSS Background Pattern Generator', href: '/tools/css-background-pattern-generator' },
-  'css-cubic-bezier-generator': { id: 'css-cubic-bezier-generator', name: 'CSS Cubic Bezier Generator', href: '/tools/css-cubic-bezier-generator' },
-  'css-glassmorphism-generator': { id: 'css-glassmorphism-generator', name: 'CSS Glassmorphism Generator', href: '/tools/css-glassmorphism-generator' },
-  'code-to-image-converter': { id: 'code-to-image-converter', name: 'Code Screenshot Generator', href: '/tools/code-to-image-converter' },
-  'url-slug-generator': { id: 'url-slug-generator', name: 'SEO URL Creator', href: '/tools/url-slug-generator' },
-  'react-native-shadow-generator': { id: 'react-native-shadow-generator', name: 'React Native Shadow Creator', href: '/tools/react-native-shadow-generator' },
-  'base64-encoder-decoder': { id: 'base64-encoder-decoder', name: 'Base64 Converter', href: '/tools/base64-encoder-decoder' },
-  'html-encoder-decoder': { id: 'html-encoder-decoder', name: 'HTML Encoder/Decoder', href: '/tools/html-encoder-decoder' },
-  'url-encoder-decoder': { id: 'url-encoder-decoder', name: 'URL Encoder/Decoder', href: '/tools/url-encoder-decoder' },
-  'html-minifier': { id: 'html-minifier', name: 'HTML Minifier', href: '/tools/html-minifier' },
-  'css-minifier': { id: 'css-minifier', name: 'CSS Minifier', href: '/tools/css-minifier' },
-  'javascript-minifier': { id: 'javascript-minifier', name: 'JavaScript Minifier', href: '/tools/javascript-minifier' },
-  'html-formatter': { id: 'html-formatter', name: 'HTML Formatter', href: '/tools/html-formatter' },
-  'css-formatter': { id: 'css-formatter', name: 'CSS Formatter', href: '/tools/css-formatter' },
-  'javascript-formatter': { id: 'javascript-formatter', name: 'JavaScript Formatter', href: '/tools/javascript-formatter' },
-  'md5-encrypt-decrypt': { id: 'md5-encrypt-decrypt', name: 'MD5 Hash Generator', href: '/tools/md5-encrypt-decrypt' },
-  'sha1-encrypt-decrypt': { id: 'sha1-encrypt-decrypt', name: 'SHA1 Hash Generator', href: '/tools/sha1-encrypt-decrypt' },
-  'sha224-encrypt-decrypt': { id: 'sha224-encrypt-decrypt', name: 'SHA224 Hash Generator', href: '/tools/sha224-encrypt-decrypt' },
-  'sha256-encrypt-decrypt': { id: 'sha256-encrypt-decrypt', name: 'SHA256 Hash Generator', href: '/tools/sha256-encrypt-decrypt' },
-  'sha384-encrypt-decrypt': { id: 'sha384-encrypt-decrypt', name: 'SHA384 Hash Generator', href: '/tools/sha384-encrypt-decrypt' },
-  'sha512-encrypt-decrypt': { id: 'sha512-encrypt-decrypt', name: 'SHA512 Hash Generator', href: '/tools/sha512-encrypt-decrypt' },
-  'jwt-encoder-decoder': { id: 'jwt-encoder-decoder', name: 'JWT Encoder/Decoder', href: '/tools/jwt-encoder-decoder' },
-  'json-tree-viewer': { id: 'json-tree-viewer', name: 'JSON Tree Viewer', href: '/tools/json-tree-viewer' },
-  'instagram-filters': { id: 'instagram-filters', name: 'Instagram Filter Effects', href: '/tools/instagram-filters' },
-  'instagram-post-generator': { id: 'instagram-post-generator', name: 'Instagram Post Creator', href: '/tools/instagram-post-generator' },
-  'instagram-photo-downloader': { id: 'instagram-photo-downloader', name: 'Instagram Image/Video Downloader', href: '/tools/instagram-photo-downloader' },
-  'tweet-generator': { id: 'tweet-generator', name: 'Twitter Post Creator', href: '/tools/tweet-generator' },
-  'tweet-to-image-converter': { id: 'tweet-to-image-converter', name: 'Tweet Image Generator', href: '/tools/tweet-to-image-converter' },
-  'twitter-ad-revenue-generator': { id: 'twitter-ad-revenue-generator', name: 'Twitter Ad Earnings Calculator', href: '/tools/twitter-ad-revenue-generator' },
-  'strong-random-password-generator': { id: 'strong-random-password-generator', name: 'Secure Password Creator', href: '/tools/strong-random-password-generator' },
-  'list-randomizer': { id: 'list-randomizer', name: 'Item Shuffler', href: '/tools/list-randomizer' },
-  'qr-code-generator': { id: 'qr-code-generator', name: 'QR Code Creator', href: '/tools/qr-code-generator' },
-  'barcode-generator': { id: 'barcode-generator', name: 'Barcode Maker', href: '/tools/barcode-generator' },
-  'bulk-barcode-qr-generator': { id: 'bulk-barcode-qr-generator', name: 'Bulk Barcode and QR Code Generator', href: '/tools/bulk-barcode-qr-generator' },
-  'echarts-integration': { id: 'echarts-integration', name: 'ECharts Chart Builder', href: '/tools/echarts-integration' },
-  'graphics-editor': { id: 'graphics-editor', name: 'Graphics Editor', href: '/tools/graphics-editor' },
-  'data-visualization-builder': { id: 'data-visualization-builder', name: 'Data Visualization Builder', href: '/tools/data-visualization-builder' },
-  'chart-exporter': { id: 'chart-exporter', name: 'Chart Exporter', href: '/tools/chart-exporter' }
-};
-
-// Static categories configuration
-const CATEGORIES_CONFIG: Category[] = [
-  {
-    id: 'dashboard',
-    name: 'Dashboard',
-    icon: <Grid className="w-5 h-5 text-indigo-400 drop-shadow-sm" />,
-    tools: []
-  },
-  {
-    id: 'image-editor',
-    name: 'Image Editor',
-    icon: <PenTool className="w-5 h-5 text-pink-400 drop-shadow-sm" />,
-    tools: [
-      'graphics-editor'
-    ]
-  },
-  {
-    id: 'favorite-tools',
-    name: 'Bookmarked Tools',
-    icon: <Star className="w-5 h-5 text-amber-400 fill-amber-400 drop-shadow-sm" />,
-    tools: [] // Will be populated dynamically
-  },
-  {
-    id: 'barcode-qr-tools',
-    name: 'Barcode and QR Code Tools',
-    icon: <QrCode className="w-5 h-5 text-green-400 drop-shadow-sm" />,
-    tools: [
-      'qr-code-generator', 'barcode-generator', 'bulk-barcode-qr-generator'
-    ]
-  },
-  {
-    id: 'text-tools',
-    name: 'Text Tools',
-    icon: <Type className="w-5 h-5 text-blue-400 drop-shadow-sm" />,
-    tools: [
-      'case-converter', 'lorem-ipsum-generator', 'letter-counter',
-      'text-to-handwriting-converter', 'bionic-reading-converter',
-      'multiple-whitespace-remover', 'google-fonts-pair-finder'
-    ]
-  },
-  {
-    id: 'image-tools',
-    name: 'Image Tools',
-    icon: <Image className="w-5 h-5 text-emerald-400 drop-shadow-sm" />,
-    tools: [
-      'image-cropper', 'image-filters', 'image-resizer',
-      'image-average-color-finder', 'image-color-extractor', 'image-color-picker'
-    ]
-  },
-  {
-    id: 'css-tools',
-    name: 'CSS Tools',
-    icon: <Palette className="w-5 h-5 text-violet-400 drop-shadow-sm" />,
-    tools: [
-      'css-loader-generator', 'css-checkbox-generator', 'css-switch-generator',
-      'css-clip-path-generator', 'css-background-pattern-generator',
-      'css-cubic-bezier-generator', 'css-glassmorphism-generator'
-    ]
-  },
-  {
-    id: 'coding-tools',
-    name: 'Developer Tools',
-    icon: <Code className="w-5 h-5 text-rose-400 drop-shadow-sm" />,
-    tools: [
-      'code-to-image-converter', 'url-slug-generator', 'react-native-shadow-generator',
-      'base64-encoder-decoder'
-    ]
-  },
-  {
-    id: 'echarts-integration',
-    name: 'Chart and Graph Tools',
-    icon: <BarChart2 className="w-5 h-5 text-green-400 drop-shadow-sm" />,
-    tools: [
-      'data-visualization-builder', 'chart-exporter'
-    ]
-  }
-];
-
-// Utility function to get a tool by its ID
-export const getToolById = (id: string) => {
-  return TOOLS_REGISTRY[id];
-};
-
-// Function to get appropriate icon for each tool
-const getToolIcon = (toolId: string): React.ReactNode => {
-  const iconMap: Record<string, React.ReactNode> = {
-    // Text Tools
-    'case-converter': <Type className="w-3.5 h-3.5 text-blue-500" />,
-    'lorem-ipsum-generator': <FileText className="w-3.5 h-3.5 text-blue-500" />,
-    'letter-counter': <Hash className="w-3.5 h-3.5 text-blue-500" />,
-    'text-to-handwriting-converter': <PenTool className="w-3.5 h-3.5 text-blue-500" />,
-    'bionic-reading-converter': <Eye className="w-3.5 h-3.5 text-blue-500" />,
-    'multiple-whitespace-remover': <Scissors className="w-3.5 h-3.5 text-blue-500" />,
-    'google-fonts-pair-finder': <Type className="w-3.5 h-3.5 text-blue-500" />,
-    
-    // Image Tools
-    'image-cropper': <Crop className="w-3.5 h-3.5 text-emerald-500" />,
-    'image-filters': <Filter className="w-3.5 h-3.5 text-emerald-500" />,
-    'image-resizer': <Maximize className="w-3.5 h-3.5 text-emerald-500" />,
-    'image-average-color-finder': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
-    'image-color-extractor': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
-    'image-color-picker': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
-    
-    // CSS Tools
-    'css-loader-generator': <Loader className="w-3.5 h-3.5 text-violet-500" />,
-    'css-checkbox-generator': <CheckSquare className="w-3.5 h-3.5 text-violet-500" />,
-    'css-switch-generator': <ToggleLeft className="w-3.5 h-3.5 text-violet-500" />,
-    'css-clip-path-generator': <Scissors className="w-3.5 h-3.5 text-violet-500" />,
-    'css-background-pattern-generator': <Grid className="w-3.5 h-3.5 text-violet-500" />,
-    'css-cubic-bezier-generator': <TrendingUp className="w-3.5 h-3.5 text-violet-500" />,
-    'css-glassmorphism-generator': <Layers className="w-3.5 h-3.5 text-violet-500" />,
-    
-    // Developer Tools
-    'code-to-image-converter': <Camera className="w-3.5 h-3.5 text-rose-500" />,
-    'url-slug-generator': <LinkIcon className="w-3.5 h-3.5 text-rose-500" />,
-    'react-native-shadow-generator': <Smartphone className="w-3.5 h-3.5 text-rose-500" />,
-    'base64-encoder-decoder': <Binary className="w-3.5 h-3.5 text-rose-500" />,
-    'html-encoder-decoder': <Code className="w-3.5 h-3.5 text-rose-500" />,
-    'url-encoder-decoder': <Globe className="w-3.5 h-3.5 text-rose-500" />,
-    'html-minifier': <FileText className="w-3.5 h-3.5 text-rose-500" />,
-    'css-minifier': <Palette className="w-3.5 h-3.5 text-rose-500" />,
-    'javascript-minifier': <Code className="w-3.5 h-3.5 text-rose-500" />,
-    'html-formatter': <FileText className="w-3.5 h-3.5 text-rose-500" />,
-    'css-formatter': <Palette className="w-3.5 h-3.5 text-rose-500" />,
-    'javascript-formatter': <Code className="w-3.5 h-3.5 text-rose-500" />,
-    'md5-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'sha1-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'sha224-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'sha256-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'sha384-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'sha512-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'jwt-encoder-decoder': <Lock className="w-3.5 h-3.5 text-rose-500" />,
-    'json-tree-viewer': <List className="w-3.5 h-3.5 text-rose-500" />,
-    
-    // QR/Barcode Tools
-    'qr-code-generator': <QrCode className="w-3.5 h-3.5 text-green-500" />,
-    'barcode-generator': <Barcode className="w-3.5 h-3.5 text-green-500" />,
-    'bulk-barcode-qr-generator': <QrCode className="w-3.5 h-3.5 text-green-500" />,
-    
-    // Social Media Tools
-    'instagram-filters': <Filter className="w-3.5 h-3.5 text-sky-500" />,
-    'instagram-post-generator': <Image className="w-3.5 h-3.5 text-sky-500" />,
-    'instagram-photo-downloader': <Image className="w-3.5 h-3.5 text-sky-500" />,
-    'tweet-generator': <Share2 className="w-3.5 h-3.5 text-sky-500" />,
-    'tweet-to-image-converter': <Camera className="w-3.5 h-3.5 text-sky-500" />,
-    'twitter-ad-revenue-generator': <CreditCard className="w-3.5 h-3.5 text-sky-500" />,
-    
-    // Miscellaneous Tools
-    'strong-random-password-generator': <Lock className="w-3.5 h-3.5 text-purple-500" />,
-    'list-randomizer': <List className="w-3.5 h-3.5 text-purple-500" />,
-    
-    // Chart Tools
-    'echarts-integration': <BarChart2 className="w-3.5 h-3.5 text-green-500" />,
-    'graphics-editor': <PenTool className="w-3.5 h-3.5 text-pink-500" />,
-    'data-visualization-builder': <BarChart2 className="w-3.5 h-3.5 text-green-500" />,
-    'chart-exporter': <BarChart2 className="w-3.5 h-3.5 text-green-500" />
-  };
-  
-  return iconMap[toolId] || <div className="w-3.5 h-3.5 rounded-full bg-gray-400"></div>;
-};
-
-// Local storage utilities for favorites and usage tracking
-const FAVORITES_KEY = 'super-tools-favorites';
-const USAGE_STATS_KEY = 'super-tools-usage-stats';
-const RECENT_TOOLS_KEY = 'super-tools-recent';
 
 interface UsageStats {
   [toolId: string]: {
@@ -304,6 +38,193 @@ interface RecentTool {
   toolId: string;
   timestamp: number;
 }
+
+// Create local categories with icons for Layout component
+const CATEGORIES_CONFIG: Category[] = [
+  {
+    id: 'dashboard',
+    name: 'Dashboard',
+    icon: <Grid className="w-5 h-5 text-indigo-400 drop-shadow-sm" />,
+    tools: []
+  },
+  {
+    id: 'favorite-tools',
+    name: 'Bookmarked Tools',
+    icon: <Star className="w-5 h-5 text-amber-400 fill-amber-400 drop-shadow-sm" />,
+    tools: []
+  },
+  {
+    id: 'text-tools',
+    name: 'Text Tools',
+    icon: <Type className="w-5 h-5 text-blue-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'text-tools')?.tools || []
+  },
+  {
+    id: 'image-tools',
+    name: 'Image Tools',
+    icon: <Image className="w-5 h-5 text-emerald-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'image-tools')?.tools || []
+  },
+  {
+    id: 'css-tools',
+    name: 'CSS Tools',
+    icon: <Palette className="w-5 h-5 text-violet-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'css-tools')?.tools || []
+  },
+  {
+    id: 'developer-tools',
+    name: 'Developer Tools',
+    icon: <Code className="w-5 h-5 text-rose-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'developer-tools')?.tools || []
+  },
+  {
+    id: 'pdf-tools',
+    name: 'PDF Tools',
+    icon: <FileText className="w-5 h-5 text-red-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'pdf-tools')?.tools || []
+  },
+  {
+    id: 'generator-tools',
+    name: 'Generator Tools',
+    icon: <QrCode className="w-5 h-5 text-green-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'generator-tools')?.tools || []
+  },
+  {
+    id: 'chart-tools',
+    name: 'Chart Tools',
+    icon: <BarChart2 className="w-5 h-5 text-green-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'chart-tools')?.tools || []
+  },
+  {
+    id: 'social-media-tools',
+    name: 'Social Media Tools',
+    icon: <Smartphone className="w-5 h-5 text-pink-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'social-media-tools')?.tools || []
+  },
+  {
+    id: 'google-maps-tools',
+    name: 'Google Maps Tools',
+    icon: <Globe className="w-5 h-5 text-teal-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'google-maps-tools')?.tools || []
+  },
+
+  {
+    id: 'business-tools',
+    name: 'Business Tools',
+    icon: <CreditCard className="w-5 h-5 text-indigo-400 drop-shadow-sm" />,
+    tools: CENTRALIZED_CATEGORIES.find(c => c.id === 'business-tools')?.tools || []
+  }
+];
+
+// Use centralized getToolById function
+const getToolById = centralGetToolById;
+
+// Function to get appropriate icon for each tool
+const getToolIcon = (toolId: string): React.ReactNode => {
+  const iconMap: Record<string, React.ReactNode> = {
+    // Text Tools
+    'case-converter': <Type className="w-3.5 h-3.5 text-blue-500" />,
+    'lorem-ipsum-generator': <FileText className="w-3.5 h-3.5 text-blue-500" />,
+    'letter-counter': <Hash className="w-3.5 h-3.5 text-blue-500" />,
+    'text-to-handwriting-converter': <PenTool className="w-3.5 h-3.5 text-blue-500" />,
+    'bionic-text-converter': <Eye className="w-3.5 h-3.5 text-blue-500" />,
+    'bionic-reading-converter': <Eye className="w-3.5 h-3.5 text-blue-500" />,
+    'whitespace-cleaner': <Scissors className="w-3.5 h-3.5 text-blue-500" />,
+    'font-pairing-finder': <Type className="w-3.5 h-3.5 text-blue-500" />,
+    'handwriting-generator': <PenTool className="w-3.5 h-3.5 text-blue-500" />,
+    'rich-text-editor': <FileText className="w-3.5 h-3.5 text-blue-500" />,
+    'color-prism-handwriting-converter': <PenTool className="w-3.5 h-3.5 text-blue-500" />,
+    
+    // Image Tools
+    'image-trimmer': <Crop className="w-3.5 h-3.5 text-emerald-500" />,
+    'photo-filters': <Filter className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-resizer': <Maximize className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-average-color-finder': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-color-extractor': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-color-picker': <Droplets className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-background-remover': <Scissors className="w-3.5 h-3.5 text-emerald-500" />,
+    'image-to-pdf': <FileText className="w-3.5 h-3.5 text-emerald-500" />,
+    'free-4k-wallpaper': <Image className="w-3.5 h-3.5 text-emerald-500" />,
+    'gif-finder': <Image className="w-3.5 h-3.5 text-emerald-500" />,
+    'graphics-editor': <PenTool className="w-3.5 h-3.5 text-emerald-500" />,
+    
+    // CSS Tools
+    'css-loader-generator': <Loader className="w-3.5 h-3.5 text-violet-500" />,
+    'css-checkbox-generator': <CheckSquare className="w-3.5 h-3.5 text-violet-500" />,
+    'css-switch-generator': <ToggleLeft className="w-3.5 h-3.5 text-violet-500" />,
+    'css-clip-path-generator': <Scissors className="w-3.5 h-3.5 text-violet-500" />,
+    'css-background-pattern-generator': <Grid className="w-3.5 h-3.5 text-violet-500" />,
+    'css-cubic-bezier-generator': <TrendingUp className="w-3.5 h-3.5 text-violet-500" />,
+    'css-glassmorphism-generator': <Layers className="w-3.5 h-3.5 text-violet-500" />,
+    'css-border-radius-generator': <Crop className="w-3.5 h-3.5 text-violet-500" />,
+    'css-formatter': <Code className="w-3.5 h-3.5 text-violet-500" />,
+    'css-minifier': <Archive className="w-3.5 h-3.5 text-violet-500" />,
+    
+    // Developer Tools
+    'code-to-image-converter': <Camera className="w-3.5 h-3.5 text-rose-500" />,
+    'url-slug-generator': <LinkIcon className="w-3.5 h-3.5 text-rose-500" />,
+    'react-native-shadow-generator': <Smartphone className="w-3.5 h-3.5 text-rose-500" />,
+    'base64-encoder-decoder': <Binary className="w-3.5 h-3.5 text-rose-500" />,
+    'html-encoder-decoder': <Code className="w-3.5 h-3.5 text-rose-500" />,
+    'url-encoder-decoder': <Globe className="w-3.5 h-3.5 text-rose-500" />,
+    'html-minifier': <Archive className="w-3.5 h-3.5 text-rose-500" />,
+    'javascript-minifier': <Archive className="w-3.5 h-3.5 text-rose-500" />,
+    'html-formatter': <Code className="w-3.5 h-3.5 text-rose-500" />,
+    'javascript-formatter': <Code className="w-3.5 h-3.5 text-rose-500" />,
+    'md5-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'sha1-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'sha224-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'sha256-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'sha384-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'sha512-encrypt-decrypt': <Lock className="w-3.5 h-3.5 text-rose-500" />,
+    'jwt-encoder-decoder': <Shield className="w-3.5 h-3.5 text-rose-500" />,
+    'json-tree-viewer': <List className="w-3.5 h-3.5 text-rose-500" />,
+    
+    // Generator Tools
+    'qrcode-generator': <QrCode className="w-3.5 h-3.5 text-green-500" />,
+    'barcode-generator': <Barcode className="w-3.5 h-3.5 text-green-500" />,
+    'bulk-barcode-qr-generator': <QrCode className="w-3.5 h-3.5 text-green-500" />,
+    'list-randomizer': <List className="w-3.5 h-3.5 text-green-500" />,
+    'strong-random-password-generator': <Lock className="w-3.5 h-3.5 text-green-500" />,
+    
+    // Social Media Tools
+    'instagram-filters': <Filter className="w-3.5 h-3.5 text-sky-500" />,
+    'instagram-post-generator': <Image className="w-3.5 h-3.5 text-sky-500" />,
+    'instagram-photo-downloader': <Image className="w-3.5 h-3.5 text-sky-500" />,
+    
+    // Chart Tools
+    'echarts-integration': <BarChart2 className="w-3.5 h-3.5 text-indigo-500" />,
+    'data-visualization-builder': <BarChart2 className="w-3.5 h-3.5 text-indigo-500" />,
+    'chart-exporter': <BarChart2 className="w-3.5 h-3.5 text-indigo-500" />,
+    
+    // Google Maps Tools
+    'maps-data-scraper': <Globe className="w-3.5 h-3.5 text-teal-500" />,
+    
+    // PDF Tools
+    'pdf-merge': <FileText className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-split': <Scissors className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-extract-pages': <FileText className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-rotate': <RotateCw className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-crop': <Crop className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-to-image': <Image className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-to-word': <FileText className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-password': <Lock className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-add-watermark': <Droplets className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-add-page-numbers': <Hash className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-metadata': <Info className="w-3.5 h-3.5 text-red-500" />,
+    'pdf-compress': <Archive className="w-3.5 h-3.5 text-red-500" />,
+    
+    // Color Tools
+    'color-prism': <Palette className="w-3.5 h-3.5 text-pink-500" />
+  };
+  
+  return iconMap[toolId] || <div className="w-3.5 h-3.5 rounded-full bg-gray-400"></div>;
+};
+
+// Local storage utilities
+const FAVORITES_KEY = 'super-tools-favorites';
+const USAGE_STATS_KEY = 'super-tools-usage-stats';
+const RECENT_TOOLS_KEY = 'super-tools-recent';
 
 const getFavorites = (): string[] => {
   try {
@@ -356,25 +277,9 @@ const saveRecentTools = (recent: RecentTool[]) => {
   }
 };
 
-const addToRecentTools = (toolId: string) => {
-  const recent = getRecentTools();
-  const filtered = recent.filter(item => item.toolId !== toolId);
-  const updated = [{ toolId, timestamp: Date.now() }, ...filtered].slice(0, 5);
-  saveRecentTools(updated);
-};
-
-const updateUsageStats = (toolId: string) => {
-  const stats = getUsageStats();
-  stats[toolId] = {
-    count: (stats[toolId]?.count || 0) + 1,
-    lastUsed: Date.now()
-  };
-  saveUsageStats(stats);
-};
-
 const Layout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true); // Start collapsed by default
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
   const [isRecentExpanded, setIsRecentExpanded] = useState(false);
   const [sidebarHovered, setSidebarHovered] = useState(false);
@@ -384,12 +289,13 @@ const Layout: React.FC = () => {
   const [recentTools, setRecentTools] = useState<RecentTool[]>(getRecentTools());
   const [usageStats, setUsageStats] = useState<UsageStats>(getUsageStats());
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
-  const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
   const [breadcrumbs, setBreadcrumbs] = useState<Array<{ name: string; path: string }>>([]);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
   const [dashboardManuallyCollapsed, setDashboardManuallyCollapsed] = useState(false);
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
+  const { isMobile, isLandscape, touchSupported } = useMobile();
   
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -397,37 +303,33 @@ const Layout: React.FC = () => {
   const tooltipTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sidebarRef = useRef<HTMLElement>(null);
   
-  // Get current path from useLocation hook
   const location = useLocation();
   
-  // Track tool usage when location changes
-  useEffect(() => {
-    const currentPath = location.pathname;
-    const toolEntry = Object.entries(TOOLS_REGISTRY).find(([_, tool]) => tool.href === currentPath);
-    if (toolEntry) {
-      const [toolId] = toolEntry;
-      addToRecentTools(toolId);
-      updateUsageStats(toolId);
-      setRecentTools(getRecentTools());
-      setUsageStats(getUsageStats());
-    }
-    
-    // Update breadcrumbs
-    updateBreadcrumbs(currentPath);
-  }, [location.pathname]);
-  
-  // Function to update breadcrumbs based on current path
-  const updateBreadcrumbs = (path: string) => {
+  // Utility functions
+  const addToRecentTools = useCallback((toolId: string) => {
+    const recent = getRecentTools();
+    const filtered = recent.filter(item => item.toolId !== toolId);
+    const updated = [{ toolId, timestamp: Date.now() }, ...filtered].slice(0, 5);
+    saveRecentTools(updated);
+  }, []);
+
+  const updateUsageStats = useCallback((toolId: string) => {
+    const stats = getUsageStats();
+    stats[toolId] = {
+      count: (stats[toolId]?.count || 0) + 1,
+      lastUsed: Date.now()
+    };
+    saveUsageStats(stats);
+  }, []);
+
+  const updateBreadcrumbs = useCallback((path: string) => {
     const newBreadcrumbs: Array<{ name: string; path: string }> = [
       { name: 'Dashboard', path: '/tools/dashboard' }
     ];
     
-    // Find current tool
     const toolEntry = Object.entries(TOOLS_REGISTRY).find(([_, tool]) => tool.href === path);
     if (toolEntry) {
       const [toolId, tool] = toolEntry;
-      
-      // Find category for this tool
       const category = CATEGORIES_CONFIG.find(cat => cat.tools.includes(toolId));
       if (category && category.id !== 'dashboard') {
         newBreadcrumbs.push({
@@ -435,14 +337,11 @@ const Layout: React.FC = () => {
           path: `/tools/${category.id}`
         });
       }
-      
-      // Add current tool
       newBreadcrumbs.push({
         name: tool.name,
         path: tool.href
       });
     } else if (path.startsWith('/tools/')) {
-      // Handle category pages
       const categoryId = path.split('/')[2];
       const category = CATEGORIES_CONFIG.find(cat => cat.id === categoryId);
       if (category && category.id !== 'dashboard') {
@@ -454,60 +353,90 @@ const Layout: React.FC = () => {
     }
     
     setBreadcrumbs(newBreadcrumbs);
-  };
+  }, []);
+
+  // Track tool usage when location changes
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const toolEntry = Object.entries(TOOLS_REGISTRY).find(([_, tool]) => tool.href === currentPath);
+    if (toolEntry) {
+      const [toolId] = toolEntry;
+      addToRecentTools(toolId);
+      updateUsageStats(toolId);
+      setRecentTools(getRecentTools());
+      setUsageStats(getUsageStats());
+    }
+    updateBreadcrumbs(currentPath);
+  }, [location.pathname, addToRecentTools, updateUsageStats, updateBreadcrumbs]);
   
-  // Enhanced sidebar shrinking logic
+  // Enhanced sidebar logic
   useEffect(() => {
     const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
     
     if (isDashboardPage) {
-      // On dashboard, expand by default unless manually collapsed
       if (!dashboardManuallyCollapsed) {
         setIsSidebarCollapsed(false);
       }
     } else {
-      // On other pages, auto-shrink unless hovered
       if (!sidebarHovered) {
         setIsSidebarCollapsed(true);
       }
-      // Reset dashboard manual collapse when leaving dashboard
       setDashboardManuallyCollapsed(false);
     }
   }, [location.pathname, sidebarHovered, dashboardManuallyCollapsed]);
   
-  // Sidebar hover handlers with improved dashboard functionality
-  const handleSidebarMouseEnter = () => {
+  // Sidebar hover handlers
+  const handleSidebarMouseEnter = useCallback(() => {
     setSidebarHovered(true);
-    const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
-    
-    // Always expand on hover
     setIsSidebarCollapsed(false);
-  };
+    
+    // Auto-scroll to active tool on hover (desktop only)
+    if (!isMobile) {
+      setTimeout(() => {
+        const activeToolElement = document.querySelector('.category-tool-override.active');
+        if (activeToolElement) {
+          activeToolElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'nearest'
+          });
+        }
+      }, 300);
+    }
+  }, [isMobile]);
   
-  const handleSidebarMouseLeave = () => {
+  const handleSidebarMouseLeave = useCallback(() => {
     setSidebarHovered(false);
     const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
     
     if (isDashboardPage) {
-      // On dashboard, only collapse if manually collapsed by user
       if (dashboardManuallyCollapsed) {
         setIsSidebarCollapsed(true);
       }
     } else {
-      // Auto-shrink after leaving if not on dashboard
       setIsSidebarCollapsed(true);
     }
-  };
+  }, [location.pathname, dashboardManuallyCollapsed]);
   
-  // Sidebar click handler to expand temporarily with improved dashboard behavior
-  const handleSidebarClick = () => {
+  const handleSidebarClick = useCallback(() => {
     const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
     
     if (isSidebarCollapsed) {
       setIsSidebarCollapsed(false);
       setSidebarHovered(true);
       
-      // Auto-shrink after 3 seconds if not on dashboard
+      // Auto-scroll to active tool on click
+      setTimeout(() => {
+        const activeToolElement = document.querySelector('.category-tool-override.active');
+        if (activeToolElement) {
+          activeToolElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'nearest'
+          });
+        }
+      }, 300);
+      
       if (!isDashboardPage) {
         setTimeout(() => {
           setSidebarHovered(false);
@@ -515,64 +444,62 @@ const Layout: React.FC = () => {
         }, 3000);
       }
     }
-  };
+  }, [isSidebarCollapsed, location.pathname]);
   
-  // Initialize expanded categories based on active category
-  React.useEffect(() => {
-    const activeCategory = CATEGORIES_CONFIG.find(category => 
-      location.pathname.startsWith(`/tools/${category.id}`)
-    );
+  // Initialize expanded categories and auto-scroll
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const toolEntry = Object.entries(TOOLS_REGISTRY).find(([_, tool]) => tool.href === currentPath);
     
-    if (activeCategory) {
-      setExpandedCategories(prev => ({
-        ...prev,
-        [activeCategory.id]: true
-      }));
+    if (toolEntry) {
+      const [toolId] = toolEntry;
+      const activeCategory = CATEGORIES_CONFIG.find(category => 
+        category.tools.includes(toolId)
+      );
+      
+      if (activeCategory) {
+        // Expand only the active category (accordion behavior)
+        setExpandedCategories({ [activeCategory.id]: true });
+        
+        // Auto-scroll to active tool after a short delay
+        setTimeout(() => {
+          const toolElement = document.querySelector(`[href="${currentPath}"]`);
+          if (toolElement) {
+            toolElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            });
+          }
+        }, 400);
+      }
     }
   }, [location.pathname]);
   
-  // Keyboard shortcuts
+  // Enhanced mobile state management
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl/Cmd + K to focus search
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-        if (isSidebarCollapsed) {
-          setIsSidebarCollapsed(false);
-          setSidebarHovered(true);
-        }
-      }
-      
-      // Ctrl/Cmd + B to toggle sidebar
-      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-        e.preventDefault();
-        toggleSidebarCollapse();
-      }
-      
-      // Escape to clear search or close sidebar
-      if (e.key === 'Escape') {
-        if (searchTerm) {
-          setSearchTerm('');
-        } else if (!isSidebarCollapsed) {
-          setIsSidebarCollapsed(true);
-        }
-      }
-      
-      // F1 to show keyboard shortcuts
-      if (e.key === 'F1') {
-        e.preventDefault();
-        setShowKeyboardShortcuts(!showKeyboardShortcuts);
-      }
-    };
+    // Close mobile sidebar when switching to desktop
+    if (!isMobile && isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
     
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [searchTerm, isSidebarCollapsed, showKeyboardShortcuts]);
-  
-  // Touch/Swipe gesture handlers for mobile
+    // Adjust sidebar behavior based on device type
+    if (isMobile) {
+      setIsSidebarCollapsed(true);
+      setSidebarHovered(false);
+    } else {
+      // Reset to default desktop behavior
+      const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
+      setIsSidebarCollapsed(!isDashboardPage);
+    }
+  }, [isMobile, isSidebarOpen, location.pathname]);
+
+  // Enhanced Touch/Swipe gesture handlers for mobile
   useEffect(() => {
-    const minSwipeDistance = 50;
+    if (!isMobile) return;
+    
+    const minSwipeDistance = 60;
+    const maxVerticalDistance = 100;
     
     const handleTouchStart = (e: TouchEvent) => {
       setTouchEnd(null);
@@ -596,51 +523,96 @@ const Layout: React.FC = () => {
       const distanceY = touchStart.y - touchEnd.y;
       const isLeftSwipe = distanceX > minSwipeDistance;
       const isRightSwipe = distanceX < -minSwipeDistance;
-      const isVerticalSwipe = Math.abs(distanceY) > Math.abs(distanceX);
+      const isVerticalSwipe = Math.abs(distanceY) > maxVerticalDistance;
       
-      // Only handle horizontal swipes
+      // Only handle horizontal swipes that aren't too vertical
       if (!isVerticalSwipe) {
         if (isLeftSwipe && isSidebarOpen) {
           // Swipe left to close sidebar on mobile
           setIsSidebarOpen(false);
-        } else if (isRightSwipe && !isSidebarOpen && touchStart.x < 50) {
-          // Swipe right from left edge to open sidebar on mobile
+        } else if (isRightSwipe && !isSidebarOpen && touchStart.x < 80) {
+          // Swipe right from left edge to open sidebar on mobile (increased edge area)
           setIsSidebarOpen(true);
         }
       }
     };
     
-    // Only add touch listeners on mobile devices
-    if (window.innerWidth <= 768) {
-      document.addEventListener('touchstart', handleTouchStart);
-      document.addEventListener('touchmove', handleTouchMove);
-      document.addEventListener('touchend', handleTouchEnd);
-      
-      return () => {
-        document.removeEventListener('touchstart', handleTouchStart);
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-      };
-    }
-  }, [touchStart, touchEnd, isSidebarOpen]);
+    // Prevent default touch behavior on sidebar overlay
+    const handleTouchStartOverlay = (e: TouchEvent) => {
+      if (isSidebarOpen && e.target && (e.target as Element).classList.contains('bg-black')) {
+        e.preventDefault();
+      }
+    };
+    
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('touchstart', handleTouchStartOverlay, { passive: false });
+    
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('touchstart', handleTouchStartOverlay);
+    };
+  }, [touchStart, touchEnd, isSidebarOpen, isMobile]);
 
-  const handleCategoryClick = (categoryPath: string) => {
+  // Keyboard shortcuts (disabled on mobile)
+  useEffect(() => {
+    if (isMobile) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        if (isSidebarCollapsed) {
+          setIsSidebarCollapsed(false);
+          setSidebarHovered(true);
+        }
+      }
+      
+      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+        e.preventDefault();
+        toggleSidebarCollapse();
+      }
+      
+      if (e.key === 'Escape') {
+        if (searchTerm) {
+          setSearchTerm('');
+        } else if (!isSidebarCollapsed) {
+          setIsSidebarCollapsed(true);
+        }
+      }
+      
+      if (e.key === 'F1') {
+        e.preventDefault();
+        setShowKeyboardShortcuts(!showKeyboardShortcuts);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [searchTerm, isSidebarCollapsed, showKeyboardShortcuts, isMobile]);
+
+  const handleCategoryClick = useCallback((categoryPath: string) => {
     navigate(categoryPath);
-    // Close mobile sidebar after navigation
-    if (window.innerWidth < 768) {
+    if (isMobile) {
       setIsSidebarOpen(false);
     }
-  };
+  }, [navigate, isMobile]);
   
-  const toggleFavorite = (toolId: string) => {
+  const toggleFavorite = useCallback((toolId: string) => {
     const newFavorites = favorites.includes(toolId)
       ? favorites.filter(id => id !== toolId)
       : [...favorites, toolId];
     setFavorites(newFavorites);
     saveFavorites(newFavorites);
-  };
+  }, [favorites]);
   
-  const handleToolHover = (toolId: string | null) => {
+  const handleToolHover = useCallback((toolId: string | null) => {
+    // Disable tooltips on touch devices
+    if (touchSupported) return;
+    
     if (tooltipTimeoutRef.current) {
       clearTimeout(tooltipTimeoutRef.current);
     }
@@ -652,26 +624,26 @@ const Layout: React.FC = () => {
     } else {
       setShowTooltip(null);
     }
-  };
+  }, [touchSupported]);
   
   // Drag and drop handlers
-  const handleDragStart = (e: React.DragEvent, toolId: string) => {
+  const handleDragStart = useCallback((e: React.DragEvent, toolId: string) => {
     setDraggedItem(toolId);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', toolId);
-  };
+  }, []);
   
-  const handleDragOver = (e: React.DragEvent, toolId: string) => {
+  const handleDragOver = useCallback((e: React.DragEvent, toolId: string) => {
     e.preventDefault();
     setDragOverItem(toolId);
     e.dataTransfer.dropEffect = 'move';
-  };
+  }, []);
   
-  const handleDragLeave = () => {
+  const handleDragLeave = useCallback(() => {
     setDragOverItem(null);
-  };
+  }, []);
   
-  const handleDrop = (e: React.DragEvent, targetToolId: string, categoryId: string) => {
+  const handleDrop = useCallback((e: React.DragEvent, targetToolId: string, categoryId: string) => {
     e.preventDefault();
     const draggedToolId = draggedItem;
     
@@ -681,14 +653,12 @@ const Layout: React.FC = () => {
       return;
     }
     
-    // Only allow reordering within favorites category
     if (categoryId === 'favorite-tools') {
       const newFavorites = [...favorites];
       const draggedIndex = newFavorites.indexOf(draggedToolId);
       const targetIndex = newFavorites.indexOf(targetToolId);
       
       if (draggedIndex !== -1 && targetIndex !== -1) {
-        // Remove dragged item and insert at target position
         newFavorites.splice(draggedIndex, 1);
         const newTargetIndex = draggedIndex < targetIndex ? targetIndex - 1 : targetIndex;
         newFavorites.splice(newTargetIndex, 0, draggedToolId);
@@ -700,18 +670,23 @@ const Layout: React.FC = () => {
     
     setDraggedItem(null);
     setDragOverItem(null);
-  };
+  }, [draggedItem, favorites]);
 
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [categoryId]: !prev[categoryId]
-    }));
-  };
+  const toggleCategory = useCallback((categoryId: string) => {
+    setExpandedCategories(prev => {
+      const newExpanded: Record<string, boolean> = {};
+      // Close all categories first (accordion behavior)
+      Object.keys(prev).forEach(key => {
+        newExpanded[key] = false;
+      });
+      // Open the clicked category if it wasn't already open
+      newExpanded[categoryId] = !prev[categoryId];
+      return newExpanded;
+    });
+  }, []);
   
   // Filter tools based on search term
   const filteredCategories = useMemo(() => {
-    // Create dynamic categories with current favorites
     const dynamicCategories = CATEGORIES_CONFIG.map(category => {
       if (category.id === 'favorite-tools') {
         return {
@@ -720,7 +695,7 @@ const Layout: React.FC = () => {
         };
       }
       return category;
-    }).filter(category => category.id !== 'dashboard'); // Exclude dashboard from sidebar
+    }).filter(category => category.id !== 'dashboard');
     
     if (!searchTerm.trim()) {
       return dynamicCategories;
@@ -750,21 +725,11 @@ const Layout: React.FC = () => {
   const recentToolsList = useMemo(() => {
     return recentTools
       .map(recent => getToolById(recent.toolId))
-      .filter((tool): tool is Tool => tool !== undefined)
+      .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
       .slice(0, 3);
   }, [recentTools]);
-  
-  // Get most used tools
-  const popularTools = useMemo(() => {
-    const sorted = Object.entries(usageStats)
-      .sort(([, a], [, b]) => b.count - a.count)
-      .slice(0, 3)
-      .map(([toolId]) => getToolById(toolId))
-      .filter((tool): tool is Tool => tool !== undefined);
-    return sorted;
-  }, [usageStats]);
 
-  const renderSidebarTools = (tools: string[], categoryId?: string) => {
+  const renderSidebarTools = useCallback((tools: string[], categoryId?: string) => {
     return tools.map((toolId) => {
       const tool = getToolById(toolId);
       if (!tool) return null;
@@ -797,7 +762,7 @@ const Layout: React.FC = () => {
               isDraggable ? 'cursor-move' : ''
             }`}
             onClick={() => {
-              if (window.innerWidth < 768) {
+              if (isMobile) {
                 setIsSidebarOpen(false);
               }
             }}
@@ -807,7 +772,6 @@ const Layout: React.FC = () => {
             onDragLeave={handleDragLeave}
             onDrop={(e) => isDraggable && handleDrop(e, toolId, categoryId!)}
           >
-            {/* Drag handle for favorites */}
             {isDraggable && (
               <div className="drag-handle mr-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <MoreHorizontal className="w-3 h-3 text-gray-400 rotate-90" />
@@ -821,36 +785,19 @@ const Layout: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="tool-content-wrapper flex-1">
+            <div className="tool-content-wrapper flex-1 min-w-0">
               <span className="tool-name-override">{tool.name}</span>
             </div>
             
-            {/* Usage count badge */}
             {usageCount > 0 && (
               <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                 {usageCount}
               </span>
             )}
             
-            {/* Favorite button */}
-            {categoryId !== 'favorite-tools' && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  toggleFavorite(toolId);
-                }}
-                className={`ml-2 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity ${
-                  isFavorite ? 'text-amber-400' : 'text-gray-400 hover:text-amber-400'
-                }`}
-                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                {isFavorite ? <Bookmark className="w-3 h-3 fill-current" /> : <BookmarkPlus className="w-3 h-3" />}
-              </button>
-            )}
+            {/* Removed bookmark button */}
           </Link>
           
-          {/* Tooltip */}
           {showTooltip === toolId && !isSidebarCollapsed && (
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -869,42 +816,56 @@ const Layout: React.FC = () => {
         </motion.li>
       );
     });
-  };
+  }, [location.pathname, favorites, usageStats, draggedItem, dragOverItem, showTooltip, isSidebarCollapsed, handleToolHover, handleDragStart, handleDragOver, handleDragLeave, handleDrop, toggleFavorite]);
 
   // Function to determine if a category is active
-  const isCategoryActive = (categoryId: string) => {
+  const isCategoryActive = useCallback((categoryId: string) => {
     if (categoryId === 'favorite-tools') {
-      return false; // Favorite tools don't have a dedicated page
+      return false;
     }
     return location.pathname.startsWith(`/tools/${categoryId}`);
-  };
+  }, [location.pathname]);
 
-  // Function to toggle sidebar collapse state with dashboard awareness
-  const toggleSidebarCollapse = () => {
+  // Function to toggle sidebar collapse state
+  const toggleSidebarCollapse = useCallback(() => {
     const isDashboardPage = location.pathname === '/' || location.pathname === '/tools/dashboard' || location.pathname.includes('/dashboard');
     
     if (isDashboardPage) {
-      // On dashboard, track manual collapse
       const newCollapsedState = !isSidebarCollapsed;
       setIsSidebarCollapsed(newCollapsedState);
       setDashboardManuallyCollapsed(newCollapsedState);
       setSidebarHovered(!newCollapsedState);
     } else {
-      // On other pages, normal toggle behavior
       setIsSidebarCollapsed(!isSidebarCollapsed);
       setSidebarHovered(!isSidebarCollapsed);
     }
-  };
+  }, [isSidebarCollapsed, location.pathname]);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden" style={{ minWidth: '100vw' }}>
-      {/* Mobile Swipe Indicator */}
-      {!isSidebarOpen && window.innerWidth <= 768 && (
-        <div className="mobile-swipe-indicator">
-          ← Swipe
-        </div>
+    <>
+      <SEOHead />
+      <MobileTouchHandler
+      onSwipeRight={isMobile && !isSidebarOpen ? () => setIsSidebarOpen(true) : undefined}
+      onSwipeLeft={isMobile && isSidebarOpen ? () => setIsSidebarOpen(false) : undefined}
+      disabled={!isMobile}
+      swipeThreshold={80}
+      className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden"
+    >
+      {/* Enhanced Mobile Swipe Indicator */}
+      {isMobile && !isSidebarOpen && !isLandscape && (
+        <motion.div 
+          className="mobile-swipe-indicator"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ delay: 2, duration: 0.5 }}
+        >
+          <div className="flex items-center gap-1">
+            <span>→</span>
+            <span className="text-xs font-medium">Swipe to open</span>
+          </div>
+        </motion.div>
       )}
-      
       {/* Keyboard Shortcuts Modal */}
       {showKeyboardShortcuts && (
         <motion.div
@@ -952,37 +913,48 @@ const Layout: React.FC = () => {
         </motion.div>
       )}
       
-      {/* Mobile Sidebar Overlay */}
-      {isSidebarOpen && (
+      {/* Enhanced Mobile Sidebar Overlay */}
+      {isMobile && isSidebarOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 backdrop-blur-sm"
           onClick={() => setIsSidebarOpen(false)}
+          onTouchStart={(e) => {
+            // Prevent scrolling when overlay is touched
+            e.preventDefault();
+          }}
         />
       )}
       
       {/* Sidebar */}
       <aside 
         ref={sidebarRef}
-        className={`sidebar-override ${isSidebarCollapsed ? 'collapsed' : ''} ${isSidebarCollapsed && sidebarHovered ? 'hover-expanded' : ''} ${isSidebarOpen ? 'mobile-open' : ''} flex flex-col flex-shrink-0`}
+        className={`sidebar-override ${
+          isMobile 
+            ? (isSidebarOpen ? 'mobile-open' : '') 
+            : (isSidebarCollapsed ? 'collapsed' : '') + (isSidebarCollapsed && sidebarHovered ? ' hover-expanded' : '')
+        } flex flex-col flex-shrink-0`}
         style={{
-          position: 'relative',
+          position: isMobile ? 'fixed' : 'relative',
           flexShrink: 0,
-          minWidth: isSidebarCollapsed ? '70px' : '280px',
-          maxWidth: isSidebarCollapsed ? '70px' : '280px',
-          width: isSidebarCollapsed ? '70px' : '280px'
+          minWidth: isMobile ? 'min(85vw, 320px)' : (isSidebarCollapsed ? '70px' : '280px'),
+          maxWidth: isMobile ? 'min(85vw, 320px)' : (isSidebarCollapsed ? '70px' : '280px'),
+          width: isMobile ? 'min(85vw, 320px)' : (isSidebarCollapsed ? '70px' : '280px'),
+          zIndex: isMobile ? 50 : 'auto',
+          height: isMobile ? '100vh' : 'auto'
         }}
-        onMouseEnter={handleSidebarMouseEnter}
-        onMouseLeave={handleSidebarMouseLeave}
-        onClick={handleSidebarClick}
+        onMouseEnter={!isMobile ? handleSidebarMouseEnter : undefined}
+        onMouseLeave={!isMobile ? handleSidebarMouseLeave : undefined}
+        onClick={!isMobile ? handleSidebarClick : undefined}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
           <div className="sidebar-header-override">
             <div className="flex items-center justify-between">
-              {isSidebarCollapsed ? (
+              {(isSidebarCollapsed && !isMobile) ? (
                 <div className="flex items-center justify-center w-full">
                   <button 
                     onClick={toggleTheme}
@@ -998,7 +970,9 @@ const Layout: React.FC = () => {
                     <div className="sidebar-header-logo-icon">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
-                    <h1>Super Tools</h1>
+                    <a href="http://localhost:5173/#categories" className="animated-text-link">
+                      <h1>1001S Tools</h1>
+                    </a>
                   </div>
                   <div className="flex items-center">
                     <button 
@@ -1017,7 +991,7 @@ const Layout: React.FC = () => {
           {/* Sidebar content */}
           <div className="collapse-container-override">
             {/* Search Bar */}
-            {!isSidebarCollapsed && (
+            {(!isSidebarCollapsed || isMobile) && (
               <div className="px-4 pb-2">
                 <div className="sidebar-search-container relative">
                   <Search className="sidebar-search-icon absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" />
@@ -1046,7 +1020,7 @@ const Layout: React.FC = () => {
             )}
             
             {/* Breadcrumbs */}
-            {!isSidebarCollapsed && breadcrumbs.length > 1 && (
+            {(!isSidebarCollapsed || isMobile) && breadcrumbs.length > 1 && (
               <div className="px-4 pb-2">
                 <nav className="text-xs text-gray-500 dark:text-gray-400">
                   <div className="flex items-center space-x-1 overflow-x-auto">
@@ -1073,7 +1047,7 @@ const Layout: React.FC = () => {
             )}
             
             {/* Recent Tools Section */}
-            {!isSidebarCollapsed && recentToolsList.length > 0 && !searchTerm && (
+            {(!isSidebarCollapsed || isMobile) && recentToolsList.length > 0 && !searchTerm && (
               <div className="px-4 pb-2">
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
@@ -1081,7 +1055,6 @@ const Layout: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className={`collapse-item-override ${isRecentExpanded ? 'expanded' : ''}`}
                 >
-                  {/* Recent Category Header */}
                   <div 
                     className="collapse-header-override cursor-pointer"
                     onClick={() => setIsRecentExpanded(!isRecentExpanded)}
@@ -1099,7 +1072,6 @@ const Layout: React.FC = () => {
                     </motion.span>
                   </div>
                   
-                  {/* Recent Tools Content */}
                   <AnimatePresence>
                     {isRecentExpanded && (
                       <motion.div 
@@ -1111,7 +1083,7 @@ const Layout: React.FC = () => {
                       >
                         <div className="category-tools-override">
                           <ul>
-                            {recentToolsList.map(tool => (
+                            {recentToolsList.map(tool => tool && (
                               <motion.li 
                                 key={tool.id}
                                 initial={{ opacity: 0, y: -10 }}
@@ -1124,7 +1096,7 @@ const Layout: React.FC = () => {
                                   to={tool.href} 
                                   className={`category-tool-override ${location.pathname === tool.href ? 'active' : ''}`}
                                   onClick={() => {
-                                    if (window.innerWidth < 768) {
+                                    if (isMobile) {
                                       setIsSidebarOpen(false);
                                     }
                                   }}
@@ -1136,7 +1108,9 @@ const Layout: React.FC = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  <span className="tool-name-override">{tool.name}</span>
+                                  <div className="tool-content-wrapper flex-1 min-w-0">
+                                    <span className="tool-name-override">{tool.name}</span>
+                                  </div>
                                 </Link>
                               </motion.li>
                             ))}
@@ -1158,14 +1132,12 @@ const Layout: React.FC = () => {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className={`collapse-item-override ${expandedCategories[category.id] ? 'expanded' : ''}`}
                   >
-                    {/* Category header with icon and name */}
                     <div 
                       className={`collapse-header-override ${isCategoryActive(category.id) ? 'active' : ''}`}
                       onClick={() => {
                         if (category.id === 'dashboard') {
                           handleCategoryClick('/tools/dashboard');
                         } else {
-                          handleCategoryClick(`/tools/${category.id}`);
                           toggleCategory(category.id);
                         }
                       }}
@@ -1175,7 +1147,7 @@ const Layout: React.FC = () => {
                           className: `${isCategoryActive(category.id) ? 'text-white' : ''}`
                         })}
                       </span>
-                      {!isSidebarCollapsed && (
+                      {(!isSidebarCollapsed || isMobile) && (
                         <>
                           <span className="header-text-override">{category.name}</span>
                           {category.tools.length > 0 && !['image-editor', 'favorite-tools', 'dashboard'].includes(category.id) && (
@@ -1191,8 +1163,7 @@ const Layout: React.FC = () => {
                       )}
                     </div>
                     
-                    {/* Submenu - only show for certain categories */}
-                    {!isSidebarCollapsed && category.tools.length > 0 && !['image-editor', 'favorite-tools', 'dashboard'].includes(category.id) && (
+                    {category.tools.length > 0 && !['image-editor', 'favorite-tools', 'dashboard'].includes(category.id) && (
                       <AnimatePresence>
                         {expandedCategories[category.id] && (
                           <motion.div 
@@ -1216,36 +1187,111 @@ const Layout: React.FC = () => {
               ))}
             </ul>
           </div>
-          
-
         </div>
       </aside>
       
       {/* Main content area */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-        {/* Header */}
+        {/* Enhanced Header */}
         <header className="header-container bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-          <div className="flex items-center justify-between p-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <button
-                className="mr-4 md:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
-                onClick={() => setIsSidebarOpen(true)}
-              >
-                <Menu />
-              </button>
-              <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                {CATEGORIES_CONFIG.find(cat => location.pathname.startsWith(`/tools/${cat.id}`))?.name || 'Dashboard'}
-              </h1>
+              {isMobile && (
+                <motion.button
+                  className="mr-3 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none rounded-lg transition-colors"
+                  onClick={() => {
+                    setIsSidebarOpen(true);
+                    // Auto-scroll to active tool when opening mobile sidebar
+                    setTimeout(() => {
+                      const activeToolElement = document.querySelector('.category-tool-override.active');
+                      if (activeToolElement) {
+                        activeToolElement.scrollIntoView({ 
+                          behavior: 'smooth', 
+                          block: 'center',
+                          inline: 'nearest'
+                        });
+                      }
+                    }, 400);
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label="Open sidebar menu"
+                >
+                  <Menu className="w-6 h-6" />
+                </motion.button>
+              )}
+              <div className="flex items-center">
+                <div className="relative">
+                  <div 
+                    className="absolute inset-0 w-[45px] h-[45px] rounded-2xl"
+                    style={{
+                      animation: 'borderRotate 8s linear infinite',
+                      background: 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)'
+                    }}
+                  />
+                  <div 
+                    className="relative w-[45px] h-[45px] rounded-2xl bg-white p-2 shadow-lg m-[2px]"
+                    style={{
+                      animation: 'glow 2s ease-in-out infinite alternate',
+                      boxShadow: '0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1)'
+                    }}
+                  >
+                    <img 
+                      src="/logo.png" 
+                      alt="Super Tools Logo" 
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                  </div>
+                  <style>{`
+                    @keyframes glow {
+                      from {
+                        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+                      }
+                      to {
+                        box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.5), 0 0 90px rgba(59, 130, 246, 0.3);
+                      }
+                    }
+                    @keyframes borderRotate {
+                      from {
+                        transform: rotate(0deg);
+                      }
+                      to {
+                        transform: rotate(360deg);
+                      }
+                    }
+                  `}</style>
+                </div>
+                {!isMobile && (
+                  <a href="https://1001s.info/tools/dashboard" className="ml-15 text-12xl font-black animated-text-link premium-text lava-background">
+                    1001S Tools
+                  </a>
+                )}
+              </div>
             </div>
+            
+            {/* Mobile-specific header actions */}
+            {isMobile && (
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={toggleTheme}
+                  className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none rounded-lg transition-colors"
+                  title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </button>
+              </div>
+            )}
           </div>
         </header>
         
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
-          <Outlet />
+        {/* Enhanced Content */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900" style={{ padding: isMobile ? '1rem' : '1.5rem' }}>
+          <div className="max-w-full">
+            <Outlet />
+          </div>
         </div>
       </main>
-    </div>
+    </MobileTouchHandler>
+    </>
   );
 };
 

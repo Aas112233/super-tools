@@ -1,0 +1,481 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\mhass\\Desktop\\super-tools\\playwright.config.js",
+    "rootDir": "C:/Users/mhass/Desktop/super-tools/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/mhass/Desktop/super-tools/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/mhass/Desktop/super-tools/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "image-tools-check.spec.ts",
+      "file": "image-tools-check.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Image Tools Check",
+          "file": "image-tools-check.spec.ts",
+          "line": 20,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Check if image tools load without console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 29357,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\nChecking /tools/image-background-remover...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  Console errors found:\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-resizer...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-trimmer...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-to-pdf...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-color-extractor...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-average-color-finder...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/image-color-picker...\n"
+                        },
+                        {
+                          "text": "  Tool container found: false\n"
+                        },
+                        {
+                          "text": "  Console errors found:\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/photo-filters...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  Console errors found:\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/instagram-filters...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/instagram-photo-downloader...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  Console errors found:\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/instagram-post-generator...\n"
+                        },
+                        {
+                          "text": "  Tool container found: false\n"
+                        },
+                        {
+                          "text": "  Console errors found:\n"
+                        },
+                        {
+                          "text": "    [error] WebSocket connection to 'ws://localhost:5173/?token=K68LPhOjBd6J' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/graphics-editor...\n"
+                        },
+                        {
+                          "text": "  Tool container found: true\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nChecking /tools/pdf-to-image...\n"
+                        },
+                        {
+                          "text": "  Tool container found: false\n"
+                        },
+                        {
+                          "text": "  No console errors detected\n"
+                        },
+                        {
+                          "text": "\nSuccessful tools: 10/13\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-background-remover\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-resizer\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-trimmer\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-to-pdf\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-color-extractor\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/image-average-color-finder\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/photo-filters\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/instagram-filters\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/instagram-photo-downloader\n"
+                        },
+                        {
+                          "text": "  ✓ /tools/graphics-editor\n"
+                        },
+                        {
+                          "text": "\nFailed tools: 3\n"
+                        },
+                        {
+                          "text": "  ✗ /tools/image-color-picker\n"
+                        },
+                        {
+                          "text": "  ✗ /tools/instagram-post-generator\n"
+                        },
+                        {
+                          "text": "  ✗ /tools/pdf-to-image\n"
+                        },
+                        {
+                          "text": "\nImage tools check completed!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-01T21:16:45.870Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7f70fa5b6670f7481ecf-4e0f54b0883a9810d622",
+              "file": "image-tools-check.spec.ts",
+              "line": 21,
+              "column": 3
+            },
+            {
+              "title": "Check functionality of Image Background Remover",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4479,
+                      "error": {
+                        "message": "Error: elementHandle.click: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n",
+                        "stack": "Error: elementHandle.click: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n    at C:\\Users\\mhass\\Desktop\\super-tools\\tests\\image-tools-check.spec.ts:111:25",
+                        "location": {
+                          "file": "C:\\Users\\mhass\\Desktop\\super-tools\\tests\\image-tools-check.spec.ts",
+                          "column": 25,
+                          "line": 111
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 109 |\u001b[39m     \n \u001b[90m 110 |\u001b[39m     \u001b[90m// Test button interactions\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m uploadButton\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 112 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 113 |\u001b[39m     \n \u001b[90m 114 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'  Upload button functional'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\mhass\\Desktop\\super-tools\\tests\\image-tools-check.spec.ts",
+                            "column": 25,
+                            "line": 111
+                          },
+                          "message": "Error: elementHandle.click: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 109 |\u001b[39m     \n \u001b[90m 110 |\u001b[39m     \u001b[90m// Test button interactions\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m uploadButton\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 112 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 113 |\u001b[39m     \n \u001b[90m 114 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'  Upload button functional'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\mhass\\Desktop\\super-tools\\tests\\image-tools-check.spec.ts:111:25\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "\nTesting Image Background Remover functionality...\n"
+                        },
+                        {
+                          "text": "  All key elements present\n"
+                        },
+                        {
+                          "text": "  Drag and drop area functional\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-01T21:17:15.320Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\mhass\\Desktop\\super-tools\\test-results\\image-tools-check-Image-To-5cb12-of-Image-Background-Remover-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\mhass\\Desktop\\super-tools\\test-results\\image-tools-check-Image-To-5cb12-of-Image-Background-Remover-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\mhass\\Desktop\\super-tools\\test-results\\image-tools-check-Image-To-5cb12-of-Image-Background-Remover-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\mhass\\Desktop\\super-tools\\tests\\image-tools-check.spec.ts",
+                        "column": 25,
+                        "line": 111
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7f70fa5b6670f7481ecf-344f49de56f2841c3dc5",
+              "file": "image-tools-check.spec.ts",
+              "line": 84,
+              "column": 3
+            },
+            {
+              "title": "Check functionality of Image Resizer",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3900,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\nTesting Image Resizer functionality...\n"
+                        },
+                        {
+                          "text": "  All key elements present\n"
+                        },
+                        {
+                          "text": "Image Resizer tested successfully!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-01T21:17:20.573Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7f70fa5b6670f7481ecf-68756a484822fa9ee43f",
+              "file": "image-tools-check.spec.ts",
+              "line": 119,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-01T21:16:45.102Z",
+    "duration": 39580.82,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

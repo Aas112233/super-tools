@@ -1,0 +1,343 @@
+{
+  "timestamp": "2025-08-29T15:39:02.727Z",
+  "summary": {
+    "total": 55,
+    "working": 0,
+    "broken": 55,
+    "notImplemented": 0
+  },
+  "workingTools": [],
+  "brokenTools": [
+    {
+      "name": "Case Converter",
+      "path": "/tools/case-converter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Lorem Ipsum Generator",
+      "path": "/tools/lorem-ipsum-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Bionic Text Converter",
+      "path": "/tools/bionic-text-converter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Text to Handwriting Converter",
+      "path": "/tools/text-to-handwriting-converter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Handwriting Generator",
+      "path": "/tools/handwriting-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Letter Counter",
+      "path": "/tools/letter-counter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "URL Slug Generator",
+      "path": "/tools/url-slug-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Whitespace Cleaner",
+      "path": "/tools/whitespace-cleaner",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Font Pairing Finder",
+      "path": "/tools/font-pairing-finder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Image Resizer",
+      "path": "/tools/image-resizer",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Image Average Color Finder",
+      "path": "/tools/image-average-color-finder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Image Color Picker",
+      "path": "/tools/image-color-picker",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Image Color Extractor",
+      "path": "/tools/image-color-extractor",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Image Trimmer",
+      "path": "/tools/image-trimmer",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Photo Filters",
+      "path": "/tools/photo-filters",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Loader Generator",
+      "path": "/tools/css-loader-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Glassmorphism Generator",
+      "path": "/tools/css-glassmorphism-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Minifier",
+      "path": "/tools/css-minifier",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Formatter",
+      "path": "/tools/css-formatter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Background Pattern Generator",
+      "path": "/tools/css-background-pattern-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Cubic Bezier Generator",
+      "path": "/tools/css-cubic-bezier-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Switch Generator",
+      "path": "/tools/css-switch-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Clip Path Generator",
+      "path": "/tools/css-clip-path-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Border Radius Generator",
+      "path": "/tools/css-border-radius-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "CSS Checkbox Generator",
+      "path": "/tools/css-checkbox-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Base64 Encoder/Decoder",
+      "path": "/tools/base64-encoder-decoder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "HTML Encoder/Decoder",
+      "path": "/tools/html-encoder-decoder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "URL Encoder/Decoder",
+      "path": "/tools/url-encoder-decoder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Code to Image Converter",
+      "path": "/tools/code-to-image-converter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "HTML Minifier",
+      "path": "/tools/html-minifier",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "HTML Formatter",
+      "path": "/tools/html-formatter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "MD5 Encrypt/Decrypt",
+      "path": "/tools/md5-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "SHA1 Encrypt/Decrypt",
+      "path": "/tools/sha1-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "SHA224 Encrypt/Decrypt",
+      "path": "/tools/sha224-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "SHA256 Encrypt/Decrypt",
+      "path": "/tools/sha256-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "SHA384 Encrypt/Decrypt",
+      "path": "/tools/sha384-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "SHA512 Encrypt/Decrypt",
+      "path": "/tools/sha512-encrypt-decrypt",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "JWT Encoder/Decoder",
+      "path": "/tools/jwt-encoder-decoder",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "JSON Tree Viewer",
+      "path": "/tools/json-tree-viewer",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "JavaScript Minifier",
+      "path": "/tools/javascript-minifier",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "JavaScript Formatter",
+      "path": "/tools/javascript-formatter",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Instagram Filters",
+      "path": "/tools/instagram-filters",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Instagram Post Generator",
+      "path": "/tools/instagram-post-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Instagram Photo Downloader",
+      "path": "/tools/instagram-photo-downloader",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "List Randomizer",
+      "path": "/tools/list-randomizer",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Barcode Generator",
+      "path": "/tools/barcode-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "QR Code Generator",
+      "path": "/tools/qrcode-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Strong Random Password Generator",
+      "path": "/tools/strong-random-password-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "PDF Merge",
+      "path": "/tools/pdf-merge",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "PDF Split",
+      "path": "/tools/pdf-split",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "PDF Compress",
+      "path": "/tools/pdf-compress",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "PDF to Word",
+      "path": "/tools/pdf-to-word",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "React Native Shadow Generator",
+      "path": "/tools/react-native-shadow-generator",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "Graphics Editor",
+      "path": "/tools/graphics-editor",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    },
+    {
+      "name": "ECharts Integration",
+      "path": "/tools/e-charts-integration",
+      "issue": "No Content",
+      "details": "Page loads but no main content found"
+    }
+  ],
+  "notImplementedTools": []
+}

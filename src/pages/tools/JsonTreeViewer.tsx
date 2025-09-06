@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, FileJson } from 'lucide-react';
 
-export const JsonTreeViewer: React.FC = () => {
+const JsonTreeViewer: React.FC = () => {
   const [input, setInput] = useState('');
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
@@ -158,3 +158,5 @@ export const JsonTreeViewer: React.FC = () => {
     </div>
   );
 };
+
+export default JsonTreeViewer;

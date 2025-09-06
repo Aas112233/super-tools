@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export const WhitespaceCleaner: React.FC = () => {
+const WhitespaceCleaner: React.FC = () => {
   const [text, setText] = useState('');
   const [removeExtraSpaces, setRemoveExtraSpaces] = useState(true);
   const [removeExtraLines, setRemoveExtraLines] = useState(true);
@@ -159,3 +159,5 @@ export const WhitespaceCleaner: React.FC = () => {
     </div>
   );
 };
+
+export default WhitespaceCleaner;

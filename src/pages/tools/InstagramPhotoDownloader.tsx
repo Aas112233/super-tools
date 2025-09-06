@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Download, Link as LinkIcon, Image as ImageIcon, Video, AlertCircle } from 'lucide-react';
 
-export const InstagramPhotoDownloader: React.FC = () => {
+const InstagramPhotoDownloader: React.FC = () => {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -392,3 +392,5 @@ export const InstagramPhotoDownloader: React.FC = () => {
     </div>
   );
 };
+
+export default InstagramPhotoDownloader;

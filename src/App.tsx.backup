@@ -1,0 +1,464 @@
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useSEO } from './hooks/useSEO';
+import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
+import LandingPage from './pages/LandingPage';
+
+// Loading component
+const LoadingComponent = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+  </div>
+);
+
+// Lazy load components to reduce initial bundle size
+const EnhancedDashboard = lazy(() => import('./components/EnhancedDashboard'));
+const RouteTest = lazy(() => import('./components/RouteTest'));
+
+// Text Tools
+const CaseConverter = lazy(() => import('./pages/tools/CaseConverter'));
+const LoremIpsumGenerator = lazy(() => import('./pages/tools/LoremIpsumGenerator'));
+const LetterCounter = lazy(() => import('./pages/tools/LetterCounter'));
+const UrlSlugGenerator = lazy(() => import('./pages/tools/UrlSlugGenerator'));
+const BionicTextConverter = lazy(() => import('./pages/tools/BionicTextConverter'));
+const TextToHandwritingConverter = lazy(() => import('./pages/tools/TextToHandwritingConverter'));
+const HandwritingGenerator = lazy(() => import('./pages/tools/HandwritingGenerator'));
+const WhitespaceCleaner = lazy(() => import('./pages/tools/WhitespaceCleaner'));
+const FontPairingFinder = lazy(() => import('./pages/tools/FontPairingFinder'));
+
+// Image Tools
+const ImageResizer = lazy(() => import('./pages/tools/ImageResizer'));
+const ImageAverageColorFinder = lazy(() => import('./pages/tools/ImageAverageColorFinder'));
+const ImageColorPicker = lazy(() => import('./pages/tools/ImageColorPicker'));
+const ImageColorExtractor = lazy(() => import('./pages/tools/ImageColorExtractor'));
+const ImageTrimmer = lazy(() => import('./pages/tools/ImageTrimmer'));
+const PhotoFilters = lazy(() => import('./pages/tools/PhotoFilters'));
+
+// CSS Tools
+const CssLoaderGenerator = lazy(() => import('./pages/tools/CssLoaderGenerator'));
+const CssGlassmorphismGenerator = lazy(() => import('./pages/tools/CssGlassmorphismGenerator'));
+const CssMinifier = lazy(() => import('./pages/tools/CssMinifier'));
+const CssFormatter = lazy(() => import('./pages/tools/CssFormatter'));
+const CssBackgroundPatternGenerator = lazy(() => import('./pages/tools/CssBackgroundPatternGenerator'));
+const CssCubicBezierGenerator = lazy(() => import('./pages/tools/CssCubicBezierGenerator'));
+const CssSwitchGenerator = lazy(() => import('./pages/tools/CssSwitchGenerator'));
+const CssClipPathGenerator = lazy(() => import('./pages/tools/CssClipPathGenerator'));
+const CssCheckboxGenerator = lazy(() => import('./pages/tools/CssCheckboxGenerator'));
+const CssBorderRadiusGenerator = lazy(() => import('./pages/tools/CssBorderRadiusGenerator'));
+
+// Developer Tools
+const Base64EncoderDecoder = lazy(() => import('./pages/tools/Base64EncoderDecoder'));
+const HtmlEncoderDecoder = lazy(() => import('./pages/tools/HtmlEncoderDecoder'));
+const UrlEncoderDecoder = lazy(() => import('./pages/tools/UrlEncoderDecoder'));
+const CodeToImageConverter = lazy(() => import('./pages/tools/CodeToImageConverter'));
+const HtmlMinifier = lazy(() => import('./pages/tools/HtmlMinifier'));
+const HtmlFormatter = lazy(() => import('./pages/tools/HtmlFormatter'));
+const Md5EncryptDecrypt = lazy(() => import('./pages/tools/Md5EncryptDecrypt'));
+const Sha1EncryptDecrypt = lazy(() => import('./pages/tools/Sha1EncryptDecrypt'));
+const Sha224EncryptDecrypt = lazy(() => import('./pages/tools/Sha224EncryptDecrypt'));
+const Sha256EncryptDecrypt = lazy(() => import('./pages/tools/Sha256EncryptDecrypt'));
+const Sha384EncryptDecrypt = lazy(() => import('./pages/tools/Sha384EncryptDecrypt'));
+const Sha512EncryptDecrypt = lazy(() => import('./pages/tools/Sha512EncryptDecrypt'));
+const JwtEncoderDecoder = lazy(() => import('./pages/tools/JwtEncoderDecoder'));
+const JsonTreeViewer = lazy(() => import('./pages/tools/JsonTreeViewer'));
+const JavascriptMinifier = lazy(() => import('./pages/tools/JavascriptMinifier'));
+const JavascriptFormatter = lazy(() => import('./pages/tools/JavascriptFormatter'));
+
+// Social Media Tools
+const InstagramFilters = lazy(() => import('./pages/tools/InstagramFilters'));
+const InstagramPostGenerator = lazy(() => import('./pages/tools/InstagramPostGenerator'));
+const InstagramPhotoDownloader = lazy(() => import('./pages/tools/InstagramPhotoDownloader'));
+
+// Utilities
+const ListRandomizer = lazy(() => import('./pages/tools/ListRandomizer'));
+const BarcodeGenerator = lazy(() => import('./pages/tools/BarcodeGenerator'));
+const QRCodeGenerator = lazy(() => import('./pages/tools/QRCodeGenerator'));
+const StrongRandomPasswordGenerator = lazy(() => import('./pages/tools/StrongRandomPasswordGenerator'));
+
+// PDF Tools
+const PdfMerge = lazy(() => import('./pages/tools/PdfMerge'));
+const PdfSplit = lazy(() => import('./pages/tools/PdfSplit'));
+const PdfCompress = lazy(() => import('./pages/tools/PdfCompress'));
+const PdfToWord = lazy(() => import('./pages/tools/PdfToWord'));
+
+// Other Tools
+const ReactNativeShadowGenerator = lazy(() => import('./pages/tools/ReactNativeShadowGenerator'));
+const GraphicsEditor = lazy(() => import('./pages/tools/GraphicsEditor'));
+const EChartsIntegration = lazy(() => import('./pages/tools/EChartsIntegration'));
+const DataVisualizationBuilder = lazy(() => import('./pages/tools/DataVisualizationBuilder'));
+const ChartExporter = lazy(() => import('./pages/tools/ChartExporter'));
+const BulkBarcodeQRGenerator = lazy(() => import('./pages/tools/BulkBarcodeQRGenerator'));
+
+function App() {
+  // Initialize SEO hook for dynamic meta tag management
+  useSEO();
+  
+  return (
+    <>
+      <Routes>
+      <Route path="/" element={<LandingPage />} />
+      
+      {/* Main dashboard route with nested tool routes */}
+      <Route path="/tools" element={<Layout />}>
+        {/* Redirect /tools to dashboard */}
+        <Route index element={<Navigate to="/tools/dashboard" replace />} />
+        
+        {/* Dashboard routes */}
+        <Route path="dashboard" element={<EnhancedDashboard />} />
+        <Route path="route-test" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><RouteTest /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Tool routes organized by category */}
+        {/* Text Tools */}
+        <Route path="case-converter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CaseConverter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="lorem-ipsum-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><LoremIpsumGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="bionic-text-converter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><BionicTextConverter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="bionic-reading-converter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><BionicTextConverter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="text-to-handwriting-converter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><TextToHandwritingConverter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="handwriting-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><HandwritingGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="letter-counter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><LetterCounter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="url-slug-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><UrlSlugGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Image Tools */}
+        <Route path="image-resizer" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ImageResizer /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="image-average-color-finder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ImageAverageColorFinder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="image-color-picker" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ImageColorPicker /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="image-color-extractor" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ImageColorExtractor /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="image-trimmer" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ImageTrimmer /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* CSS Tools */}
+        <Route path="css-loader-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssLoaderGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-glassmorphism-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssGlassmorphismGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-minifier" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssMinifier /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-formatter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssFormatter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-background-pattern-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssBackgroundPatternGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-cubic-bezier-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssCubicBezierGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-switch-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssSwitchGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-clip-path-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssClipPathGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-border-radius-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssBorderRadiusGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="data-visualization-builder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><DataVisualizationBuilder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="chart-exporter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ChartExporter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="bulk-barcode-qr-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><BulkBarcodeQRGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="css-checkbox-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CssCheckboxGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Developer Tools */}
+        <Route path="base64-encoder-decoder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Base64EncoderDecoder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="html-encoder-decoder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><HtmlEncoderDecoder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="url-encoder-decoder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><UrlEncoderDecoder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="code-to-image-converter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><CodeToImageConverter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="html-minifier" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><HtmlMinifier /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="html-formatter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><HtmlFormatter /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="md5-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Md5EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="sha1-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Sha1EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="sha224-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Sha224EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="sha256-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Sha256EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="sha384-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Sha384EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="sha512-encrypt-decrypt" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><Sha512EncryptDecrypt /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="jwt-encoder-decoder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><JwtEncoderDecoder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="json-tree-viewer" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><JsonTreeViewer /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="javascript-minifier" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><JavascriptMinifier /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="javascript-formatter" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><JavascriptFormatter /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Social Media Tools */}
+        <Route path="instagram-filters" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><InstagramFilters /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="instagram-post-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><InstagramPostGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="instagram-photo-downloader" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><InstagramPhotoDownloader /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Utilities */}
+        <Route path="list-randomizer" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ListRandomizer /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="barcode-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><BarcodeGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="whitespace-cleaner" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><WhitespaceCleaner /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="font-pairing-finder" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><FontPairingFinder /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="photo-filters" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><PhotoFilters /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="qrcode-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><QRCodeGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="strong-random-password-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><StrongRandomPasswordGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* PDF Tools */}
+        <Route path="pdf-merge" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><PdfMerge /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="pdf-split" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><PdfSplit /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="pdf-compress" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><PdfCompress /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="pdf-to-word" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><PdfToWord /></ErrorBoundary>
+          </Suspense>
+        } />
+        
+        {/* Other Tools */}
+        <Route path="react-native-shadow-generator" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><ReactNativeShadowGenerator /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="graphics-editor" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><GraphicsEditor /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="e-charts-integration" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><EChartsIntegration /></ErrorBoundary>
+          </Suspense>
+        } />
+        <Route path="echarts-integration" element={
+          <Suspense fallback={<LoadingComponent />}>
+            <ErrorBoundary><EChartsIntegration /></ErrorBoundary>
+          </Suspense>
+        } />
+      </Route>
+
+      {/* Handle unknown tool routes */}
+      <Route path="*" element={
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 text-center space-y-4">
+            <div className="text-6xl mb-4">🔍</div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tool Not Found</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              The tool you're looking for doesn't exist or the URL is incorrect.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <button 
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                onClick={() => window.location.href = '/tools/dashboard'}
+              >
+                Go to Dashboard
+              </button>
+              <button 
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg transition-colors"
+                onClick={() => window.history.back()}
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      } />
+    </Routes>
+    </>
+  );
+}
+
+export default App;

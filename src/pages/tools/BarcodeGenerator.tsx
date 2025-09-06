@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import JsBarcode from 'jsbarcode';
 import { Copy, Check, Download, Info, AlertCircle } from 'lucide-react';
 
-export const BarcodeGenerator: React.FC = () => {
+const BarcodeGenerator: React.FC = () => {
   const [text, setText] = useState('1234567890');
   const [barcodeType, setBarcodeType] = useState('CODE128');
   const [error, setError] = useState('');
@@ -414,3 +414,5 @@ export const BarcodeGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default BarcodeGenerator;

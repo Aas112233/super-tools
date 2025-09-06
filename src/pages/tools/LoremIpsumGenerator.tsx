@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 
-export const LoremIpsumGenerator: React.FC = () => {
+const LoremIpsumGenerator: React.FC = () => {
   const [type, setType] = useState('paragraphs');
   const [count, setCount] = useState(3);
   const [startWithLorem, setStartWithLorem] = useState(false);
@@ -130,3 +130,5 @@ export const LoremIpsumGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default LoremIpsumGenerator;

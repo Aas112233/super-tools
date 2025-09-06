@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
 
-export const Md5EncryptDecrypt: React.FC = () => {
+const Md5EncryptDecrypt: React.FC = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -103,3 +103,5 @@ export const Md5EncryptDecrypt: React.FC = () => {
     </div>
   );
 };
+
+export default Md5EncryptDecrypt;

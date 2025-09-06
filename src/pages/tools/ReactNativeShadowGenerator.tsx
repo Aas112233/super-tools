@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Smartphone } from 'lucide-react';
 
-export const ReactNativeShadowGenerator: React.FC = () => {
+const ReactNativeShadowGenerator: React.FC = () => {
   const [shadowOffset, setShadowOffset] = useState({ width: 0, height: 2 });
   const [shadowOpacity, setShadowOpacity] = useState(0.25);
   const [shadowRadius, setShadowRadius] = useState(3.84);
@@ -284,3 +284,5 @@ elevation: ${elevation},`;
     </div>
   );
 };
+
+export default ReactNativeShadowGenerator;

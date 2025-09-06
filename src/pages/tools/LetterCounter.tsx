@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export const LetterCounter: React.FC = () => {
+const LetterCounter: React.FC = () => {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -84,3 +84,5 @@ export const LetterCounter: React.FC = () => {
     </div>
   );
 };
+
+export default LetterCounter;

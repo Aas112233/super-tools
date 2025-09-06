@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ImageColorPicker } from 'react-image-color-picker';
 
-export const ImageColorExtractor: React.FC = () => {
+const ImageColorExtractor: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [colorHistory, setColorHistory] = useState<string[]>([]);
@@ -167,3 +167,5 @@ export const ImageColorExtractor: React.FC = () => {
     </div>
   );
 };
+
+export default ImageColorExtractor;

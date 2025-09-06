@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Download, RotateCcw, Image as ImageIcon } from 'lucide-react';
 
-export const InstagramFilters: React.FC = () => {
+const InstagramFilters: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>('none');
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -218,3 +218,5 @@ export const InstagramFilters: React.FC = () => {
     </div>
   );
 };
+
+export default InstagramFilters;

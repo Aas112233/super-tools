@@ -18,8 +18,9 @@ import {
   Sparkles,
   BarChart2
 } from 'lucide-react';
+import LazyImage from '../components/LazyImage';
 // @ts-ignore
-import heroBackground from '../assets/hero-background.jpg';
+import heroBackground from '../assets/hero-background.png';
 
 const LandingPage: React.FC = () => {
   const features = [
@@ -134,11 +135,6 @@ const LandingPage: React.FC = () => {
         
         {/* Hero background image with overlay */}
         <div className="absolute inset-0">
-          <img 
-            src={heroBackground} 
-            alt="Hero Background" 
-            className="w-full h-full object-cover opacity-20"
-          />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20"></div>
         </div>
         

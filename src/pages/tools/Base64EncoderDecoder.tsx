@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Copy, Check, ArrowUpDown, FileText, Image as ImageIcon } from 'lucide-react';
+import { addButtonAnimation } from '../../utils/buttonAnimations';
 
 export default function Base64EncoderDecoder() {
   const [input, setInput] = useState('');

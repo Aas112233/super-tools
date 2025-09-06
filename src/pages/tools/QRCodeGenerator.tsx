@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Copy, Check, Download, Info, AlertCircle } from 'lucide-react';
 
-export const QRCodeGenerator: React.FC = () => {
+const QRCodeGenerator: React.FC = () => {
   const [text, setText] = useState('https://example.com');
   const [size, setSize] = useState(200);
   const [bgColor, setBgColor] = useState('#ffffff');
@@ -484,3 +484,5 @@ export const QRCodeGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default QRCodeGenerator;

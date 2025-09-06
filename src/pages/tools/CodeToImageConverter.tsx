@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 
-export const CodeToImageConverter: React.FC = () => {
+const CodeToImageConverter: React.FC = () => {
   const [code, setCode] = useState(`function fibonacci(n) {
   if (n <= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
@@ -269,14 +269,30 @@ console.log(fibonacci(10)); // 55`);
           </div>
         </div>
       </div>
-      <style jsx>{`
-        .keyword { color: #569cd6; font-weight: bold; }
-        .string { color: #ce9178; }
-        .number { color: #b5cea8; }
-        .comment { color: #6a9955; font-style: italic; }
-        .code-content { overflow: hidden; }
-        .line-numbers { text-align: right; }
+      <style>{`
+        .keyword { 
+          color: #569cd6 !important; 
+          font-weight: bold !important; 
+        }
+        .string { 
+          color: #ce9178 !important; 
+        }
+        .number { 
+          color: #b5cea8 !important; 
+        }
+        .comment { 
+          color: #6a9955 !important; 
+          font-style: italic !important; 
+        }
+        .code-content { 
+          overflow: hidden !important; 
+        }
+        .line-numbers { 
+          text-align: right !important; 
+        }
       `}</style>
     </div>
   );
 };
+
+export default CodeToImageConverter;

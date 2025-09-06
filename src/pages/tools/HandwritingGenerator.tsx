@@ -260,3 +260,5 @@ export const HandwritingGenerator: React.FC = () => {
     </div>
   );
 };
+
+export default HandwritingGenerator;
